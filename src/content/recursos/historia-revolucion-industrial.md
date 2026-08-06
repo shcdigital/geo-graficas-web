@@ -10,7 +10,7 @@ formato: "PDF"
 paginas: 33
 unidades: ["Antecedentes", "La industria textil", "El ferrocarril", "Consecuencias económicas y sociales", "El pensamiento social"]
 incluye: ["Líneas de tiempo", "Fuentes y documentos", "Actividades de análisis", "Evaluaciones probatorias"]
-precio: "4.800"
+precio: "Cat-B"
 coverFrom: "#fbbf24"
 coverTo: "#f97316"
 emoji: "🏭"

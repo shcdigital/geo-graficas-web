@@ -10,7 +10,7 @@ formato: "PDF"
 paginas: 3
 unidades: []
 incluye: []
-precio: "400"
+precio: "Cat-A"
 precioDestacado: false
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"

@@ -10,7 +10,7 @@ formato: "PDF"
 paginas: 45
 unidades: ["Mitos","Tragedias Griegas"]
 incluye: ["Edipo Rey y Antígona"]
-precio: "$8300"
+precio: "Cat-C"
 precioDestacado: true
 coverFrom: "#16a34a"
 coverTo: "#0284c7"

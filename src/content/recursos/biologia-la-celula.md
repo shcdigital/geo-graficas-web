@@ -10,7 +10,7 @@ formato: "PDF"
 paginas: 38
 unidades: ["Niveles de organización","Célula procariota y eucariota","Organelas","La membrana","Nutrición celular"]
 incluye: ["Esquemas","Cuadros comparativos","Actividades con clave","Actividades integradoras"]
-precio: "4.200"
+precio: "Cat-B"
 precioDestacado: true
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"
