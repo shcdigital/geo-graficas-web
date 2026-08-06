@@ -573,16 +573,17 @@
     const msg = $val("adminMsg");
     const asunto = `Nueva publicación — ${$val("title")}`;
 
-    // Multipart con el .md como adjunto y los datos del cuadernillo.
+    // FormSubmit AJAX no adjunta archivos (ver docs): el .md se envía como
+    // campo de texto dentro del correo para que llegue completo.
     const form = new FormData();
     form.append("_subject", asunto);
     form.append("_template", "table");
-    form.append("archivo", new Blob([md], { type: "text/markdown;charset=utf-8" }), `${slug}.md`);
     form.append("Slug", slug);
     form.append("Título", $val("title"));
     form.append("Asignatura", $val("asignatura"));
     form.append("Precio", $val("precio") || "Consultar");
     form.append("Mensaje del administrador", msg || "—");
+    form.append(`Contenido archivo (${slug}.md)`, md);
 
     $("btn-send").disabled = true;
     $("btn-send").textContent = "Enviando…";
