@@ -175,6 +175,7 @@
     font-weight: 600; padding: 0.75rem 1.4rem; border-radius: var(--radius-full);
   }
   .btn-primary { background: var(--gradient-brand); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn-success { background: var(--state-success); color: #fff; box-shadow: var(--shadow-sm); }
   .btn-ghost { background: #fff; color: var(--text-primary); border: 1px solid var(--border-default); }
 
   .output-label { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; }
@@ -216,12 +217,12 @@
         <div class="field full">
           <label for="title">Título *</label>
           <input type="text" id="title" placeholder="Cuadernillo de Historia — Revolución Industrial" />
-          <span class="hint">Si dejás vacío el slug, se genera automáticamente desde el título.</span>
+          <span class="hint">El nombre del archivo (slug) se genera solo desde este título.</span>
         </div>
         <div class="field">
           <label for="slug">Slug (nombre del archivo)</label>
-          <input type="text" id="slug" placeholder="historia-revolucion-industrial" />
-          <span class="hint">Minúsculas, guiones, sin acentos.</span>
+          <input type="text" id="slug" readonly placeholder="se genera automáticamente" />
+          <span class="hint">Se genera automáticamente desde el título. No editable.</span>
         </div>
         <input type="hidden" id="pubDate" />
         <div class="field full">
@@ -346,6 +347,10 @@
       <div class="field full">
         <textarea id="body" rows="4" placeholder="Descripción larga en Markdown para la página de detalle."></textarea>
       </div>
+      <div class="field full">
+        <label for="adminMsg">Mensaje al administrador</label>
+        <textarea id="adminMsg" rows="3" placeholder="Nota interna para el administrador (no se muestra en el sitio). Ej: revisar precio, fuente de los datos, etc."></textarea>
+      </div>
     </section>
 
     <!-- Acciones -->
@@ -353,6 +358,7 @@
       <button type="button" class="btn btn-primary" id="btn-generate">Generar .md</button>
       <button type="button" class="btn btn-ghost" id="btn-copy">Copiar</button>
       <button type="button" class="btn btn-ghost" id="btn-download">Descargar .md</button>
+      <button type="button" class="btn btn-success" id="btn-send">Enviar publicación</button>
       <button type="button" class="btn btn-ghost" id="btn-clear">Limpiar</button>
     </div>
 
@@ -429,12 +435,11 @@
 
   ["emoji", "materia", "destacado"].forEach((id) => $(id).addEventListener("change", updatePreview));
   $("title").addEventListener("input", () => {
-    if (!$("slug").value) $("slug").placeholder = slugFrom($("title").value) || "tu-cuadernillo";
+    $("slug").value = slugFrom($("title").value);
   });
 
   function currentSlug() {
-    const manual = $val("slug");
-    return slugFrom(manual || $val("title") || "cuadernillo");
+    return slugFrom($val("title") || "cuadernillo");
   }
 
   function validate() {
@@ -515,7 +520,7 @@
     document.querySelectorAll("input[type=checkbox]").forEach((el) => { el.checked = false; });
     lists.unidad = []; lists.incluye = [];
     renderChips("unidad"); renderChips("incluye");
-    $("slug").placeholder = "tu-cuadernillo";
+    $("slug").value = "";
     $("nivel").value = "Secundaria";
     $("precio").placeholder = "";
     $("output").value = "— El archivo se genera acá. —";
@@ -549,6 +554,60 @@
     URL.revokeObjectURL(a.href);
     toast("✅ Descargado");
   });
+
+  // Config para el envío de publicación al administrador.
+  // Mientras no exista backend, la publicación se descarga y se abre el correo
+  // con el archivo adjunto preparado para enviar manualmente.
+  const ADMIN_EMAIL = "geo.graficasdigital@gmail.com";
+  const SUBMIT_ENDPOINT = ""; // Ej: "https://tu-backend.com/geo-graficas/notificacion" (a futuro)
+
+  $("btn-send").addEventListener("click", () => {
+    if (!validate()) {
+      toast("⚠ Revisá los campos marcados en rojo antes de enviar");
+      return;
+    }
+    $("pubDate").value = new Date().toISOString().split("T")[0];
+    const md = buildMarkdown();
+    const slug = currentSlug();
+    const msg = $val("adminMsg");
+    const asunto = `Nueva publicación — ${$val("title")}`;
+
+    const payload = {
+      tipo: "nuevo-cuadernillo",
+      slug,
+      asunto,
+      markdown: md,
+      mensajeAdmin: msg,
+    };
+
+    if (SUBMIT_ENDPOINT) {
+      // A futuro: POST a un backend que envía el mail con el .md adjunto.
+      fetch(SUBMIT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          toast("✅ Publicación enviada al administrador");
+        })
+        .catch((e) => {
+          console.error(e);
+          toast("⚠ No se pudo enviar. Se abrió el correo para enviarlo manual.");
+          abrirCorreoFallback(payload);
+        });
+      return;
+    }
+
+    abrirCorreoFallback(payload);
+  });
+
+  function abrirCorreoFallback(payload) {
+    const cuerpo = `Hola,\n\nSe cargó una nueva publicación:\n\n• Título: ${payload.asunto}\n• Archivo: ${payload.slug}.md\n\nPegá el contenido adjunto (o descargalo) para publicarla:\n\n${payload.markdown}\n\n${payload.mensajeAdmin ? `Mensaje del autor:\n${payload.mensajeAdmin}\n\n` : ""}— Enviado desde el generador de cuadernillos Geo.Gráficas`;
+    const mailto = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(payload.asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    window.open(mailto, "_self");
+    toast("📧 Se abrió tu correo con la publicación lista para enviar");
+  }
 
   updatePreview();
 </script>
