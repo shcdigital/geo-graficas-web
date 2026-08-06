@@ -16,15 +16,22 @@ const href = route(`/recursos/${recurso.slug}/`);
 ---
 
 <article class="card">
-  <a href={href} class="card__media" style={`background: linear-gradient(135deg, ${r.coverFrom}, ${r.coverTo});`}>
-    <span class="card__emoji" aria-hidden="true">{r.emoji}</span>
-    <span class="card__materia">{r.materia}</span>
-    {r.destacado && <span class="card__badge">Destacado</span>}
-  </a>
+  {r.imagen ? (
+    <a href={href} class="card__media card__media--img">
+      <img class="card__img" src={r.imagen} alt={r.title} loading="lazy" />
+      {r.destacado && <span class="card__badge">Destacado</span>}
+    </a>
+  ) : (
+    <a href={href} class="card__media" style={`background: linear-gradient(135deg, ${r.coverFrom}, ${r.coverTo});`}>
+      <span class="card__emoji" aria-hidden="true">{r.emoji}</span>
+      <span class="card__materia">{r.materia}</span>
+      {r.destacado && <span class="card__badge">Destacado</span>}
+    </a>
+  )}
 
   <div class="card__body">
     <h3 class="card__title">
-      <a href={href}>{r.title}</a>
+      <a href={href}><span class="card__title-emoji" aria-hidden="true">{r.emoji}</span>{r.title}</a>
     </h3>
     <p class="card__meta">
       <span>{r.asignatura}</span> · <span>{r.ciclo}</span>
@@ -67,6 +74,16 @@ const href = route(`/recursos/${recurso.slug}/`);
     place-items: center;
     aspect-ratio: 4 / 3;
   }
+  .card__media--img {
+    overflow: hidden;
+    background: var(--color-surface-soft);
+  }
+  .card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .card__emoji {
     font-size: 3.25rem;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
@@ -79,6 +96,17 @@ const href = route(`/recursos/${recurso.slug}/`);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  .card__title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+  }
+  .card__title a:hover {
+    color: var(--color-brand-primary);
+  }
+  .card__title-emoji {
+    margin-right: 0.35rem;
+    font-size: 1.1em;
   }
   .card__badge {
     position: absolute;
@@ -94,13 +122,6 @@ const href = route(`/recursos/${recurso.slug}/`);
   .card__body {
     padding: var(--spacing-md);
     flex: 1;
-  }
-  .card__title {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--spacing-xs);
-  }
-  .card__title a:hover {
-    color: var(--color-brand-primary);
   }
   .card__meta {
     color: var(--color-text-secondary);

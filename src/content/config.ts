@@ -28,6 +28,8 @@ const recursos = defineCollection({
     coverTo: z.string().default("#ee2a7b"),
     emoji: z.string().default("📘"),
     destacado: z.boolean().default(false),
+    // Portada opcional: ruta pública a la imagen (se sirve desde public/img/recursos/<slug>)
+    imagen: z.string().optional(),
   }),
 });
 

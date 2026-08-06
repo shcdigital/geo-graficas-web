@@ -34,18 +34,25 @@ const wa = whatsappUrl(r.title);
       <a class="detalle__back" href={section("/", "#catalogo")}>← Volver al catálogo</a>
 
       <div class="detalle__grid">
-        <div
-          class="detalle__cover"
-          style={`background: linear-gradient(135deg, ${r.coverFrom}, ${r.coverTo});`}
-        >
-          <span class="detalle__emoji" aria-hidden="true">{r.emoji}</span>
-          <span class="detalle__materia">{r.materia}</span>
-          {r.destacado && <span class="detalle__badge">Destacado</span>}
-        </div>
+        {r.imagen ? (
+          <div class="detalle__cover detalle__cover--img">
+            <img class="detalle__img" src={r.imagen} alt={r.title} />
+            {r.destacado && <span class="detalle__badge">Destacado</span>}
+          </div>
+        ) : (
+          <div
+            class="detalle__cover"
+            style={`background: linear-gradient(135deg, ${r.coverFrom}, ${r.coverTo});`}
+          >
+            <span class="detalle__emoji" aria-hidden="true">{r.emoji}</span>
+            <span class="detalle__materia">{r.materia}</span>
+            {r.destacado && <span class="detalle__badge">Destacado</span>}
+          </div>
+        )}
 
         <div class="detalle__info">
           <p class="detalle__meta">{r.asignatura} · {r.ciclo}</p>
-          <h1 class="detalle__titulo">{r.title}</h1>
+          <h1 class="detalle__titulo"><span class="detalle__titulo-emoji" aria-hidden="true">{r.emoji}</span>{r.title}</h1>
           <p class="detalle__desc">{r.description}</p>
 
           <dl class="detalle__datos">
@@ -137,6 +144,15 @@ const wa = whatsappUrl(r.title);
     box-shadow: var(--shadow-md);
     overflow: hidden;
   }
+  .detalle__cover--img {
+    background: var(--color-surface-soft);
+  }
+  .detalle__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .detalle__emoji {
     font-size: 6rem;
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
@@ -169,6 +185,9 @@ const wa = whatsappUrl(r.title);
   .detalle__titulo {
     font-size: var(--font-size-heading-md);
     margin-bottom: var(--spacing-md);
+  }
+  .detalle__titulo-emoji {
+    margin-right: 0.5rem;
   }
   .detalle__desc {
     color: var(--color-text-secondary);
