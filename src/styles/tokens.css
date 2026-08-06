@@ -49,6 +49,10 @@
   --color-whatsapp: #25d366;
   --color-whatsapp-dark: #1fb659;
 
+  /* Instagram brand */
+  --color-instagram: #e4405f;
+  --color-instagram-dark: #c13584;
+
   /* Tipografía */
   --font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;

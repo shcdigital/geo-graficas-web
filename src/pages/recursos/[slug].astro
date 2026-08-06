@@ -73,11 +73,11 @@ const wa = whatsappUrl(r.title);
           <p class="detalle__precio">{r.precio}</p>
 
           <div class="detalle__botones">
-            <a class="detalle__btn detalle__btn--wa" href={wa ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer">
+            <a class="detalle__btn" href={wa ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={wa ? "detalle__btn--wa" : "detalle__btn--ig"}>
               <Icon name={wa ? "whatsapp" : "instagram"} size={20} />
               <span>{wa ? "Pedir por WhatsApp" : "Mensaje por Instagram"}</span>
             </a>
-            <a class="detalle__btn detalle__btn--ghost" href={instagramDmUrl()} target="_blank" rel="noopener noreferrer">
+            <a class="detalle__btn detalle__btn--ig" href={instagramDmUrl()} target="_blank" rel="noopener noreferrer">
               <Icon name="instagram" size={20} />
               <span>Consultar por IG</span>
             </a>
@@ -232,18 +232,18 @@ const wa = whatsappUrl(r.title);
     padding: 0.85rem 1.5rem;
     border-radius: var(--radius-full);
     font-weight: var(--font-weight-semibold);
-    transition: transform 0.15s ease;
+    color: #fff;
+    transition: transform 0.15s ease, opacity 0.15s ease;
   }
   .detalle__btn--wa {
-    background: var(--color-state-success);
-    color: #fff;
+    background: var(--color-whatsapp);
   }
-  .detalle__btn--ghost {
-    border: 2px solid var(--color-border-default);
-    color: var(--color-text-primary);
+  .detalle__btn--ig {
+    background: var(--color-instagram);
   }
   .detalle__btn:hover {
     transform: translateY(-2px);
+    opacity: 0.9;
   }
   .detalle__cuerpo {
     margin-top: var(--spacing-3xl);

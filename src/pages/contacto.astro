@@ -29,14 +29,15 @@ const waOk = whatsappHabilitado();
             href={waOk ? (whatsappUrl() as string) : instagramDmUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            class:list={waOk ? "tarjeta--wa" : "tarjeta--ig"}
           >
-            <span class="tarjeta__icono"><Icon name={waOk ? "whatsapp" : "instagram"} size={26} /></span>
+            <span class="tarjeta__icono" class:list={waOk ? "tarjeta__icono--wa" : "tarjeta__icono--ig"}><Icon name={waOk ? "whatsapp" : "instagram"} size={26} /></span>
             <span class="tarjeta__titulo">{waOk ? "WhatsApp" : "Instagram DM"}</span>
             <span class="tarjeta__detalle">{waOk ? "Chat directo y rápido" : "Respondemos por mensaje directo"}</span>
           </a>
 
-          <a class="tarjeta" href={instagramPerfilUrl()} target="_blank" rel="noopener noreferrer">
-            <span class="tarjeta__icono"><Icon name="instagram" size={26} /></span>
+          <a class="tarjeta tarjeta--ig" href={instagramPerfilUrl()} target="_blank" rel="noopener noreferrer">
+            <span class="tarjeta__icono tarjeta__icono--ig"><Icon name="instagram" size={26} /></span>
             <span class="tarjeta__titulo">@{SITE.instagram}</span>
             <span class="tarjeta__detalle">Mirá el feed completo de recursos</span>
           </a>
@@ -89,15 +90,22 @@ const waOk = whatsappHabilitado();
     text-align: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-xl);
-    background: var(--color-surface-base);
-    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
     transition: box-shadow 0.18s ease, transform 0.18s ease;
+    color: #fff;
+  }
+  .tarjeta--wa {
+    background: var(--color-whatsapp);
+    border: 1px solid var(--color-whatsapp-dark);
+  }
+  .tarjeta--ig {
+    background: var(--color-instagram);
+    border: 1px solid var(--color-instagram-dark);
   }
   .tarjeta:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-md);
+    opacity: 0.9;
   }
   .tarjeta__icono {
     display: grid;
@@ -107,6 +115,14 @@ const waOk = whatsappHabilitado();
     border-radius: 50%;
     background: var(--gradient-brand-soft);
     color: var(--color-brand-end);
+  }
+  .tarjeta__icono--wa {
+    background: var(--color-whatsapp);
+    color: #fff;
+  }
+  .tarjeta__icono--ig {
+    background: var(--color-instagram);
+    color: #fff;
   }
   .tarjeta__titulo {
     font-weight: var(--font-weight-bold);

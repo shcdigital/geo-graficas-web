@@ -6,16 +6,18 @@ import Icon from "./Icon.astro";
 
 const waOk = whatsappHabilitado();
 const href = waOk ? (whatsappUrl() as string) : instagramDmUrl();
+const iconName = waOk ? "whatsapp" : "instagram";
+const isWa = waOk;
 ---
 
 <a
-  class="wa-float"
+  class="wa-float" class:list={waOk ? "wa-float" : "wa-float wa-float--ig"}
   href={href}
   target="_blank"
   rel="noopener noreferrer"
   aria-label={waOk ? "Chatear por WhatsApp" : "Enviar mensaje por Instagram"}
 >
-  <Icon name={waOk ? "whatsapp" : "instagram"} size={28} />
+  <Icon name={iconName} size={28} />
 </a>
 
 <style>
@@ -30,11 +32,15 @@ const href = waOk ? (whatsappUrl() as string) : instagramDmUrl();
     height: 60px;
     border-radius: 50%;
     color: #fff;
-    background: var(--gradient-brand);
+    background: var(--color-whatsapp);
     box-shadow: var(--shadow-lg);
     transition: transform 0.15s ease;
   }
+  .wa-float--ig {
+    background: var(--color-instagram);
+  }
   .wa-float:hover {
     transform: scale(1.08);
+    opacity: 0.9;
   }
 </style>

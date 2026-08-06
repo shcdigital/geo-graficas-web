@@ -101,11 +101,11 @@ const waOk = whatsappHabilitado();
         <h2 id="titulo-contacto" class="seccion__titulo contacto__titulo">¿Tenés una consulta?</h2>
         <p class="contacto__sub">Escribinos y te respondemos a la brevedad. Trabajamos por WhatsApp e Instagram.</p>
         <div class="contacto__botones">
-          <a class="contacto__btn" href={waOk ? contactoUrl() : instagramDmUrl()} target="_blank" rel="noopener noreferrer">
+          <a class="contacto__btn" href={waOk ? contactoUrl() : instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={waOk ? "contacto__btn--wa" : "contacto__btn--ig"}>
             <Icon name={waOk ? "whatsapp" : "instagram"} size={22} />
             <span>{waOk ? "WhatsApp directo" : "Mensaje por Instagram"}</span>
           </a>
-          <a class="contacto__btn contacto__btn--ghost" href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer">
+          <a class="contacto__btn contacto__btn--ig" href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer">
             <Icon name="instagram" size={22} />
             <span>@{SITE.instagram}</span>
           </a>
@@ -260,12 +260,22 @@ const waOk = whatsappHabilitado();
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-sm);
-    background: #fff;
-    color: #1a1a1a;
-    font-weight: var(--font-weight-semibold);
     padding: 0.9rem 1.6rem;
     border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
+    color: #fff;
     box-shadow: var(--shadow-md);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .contacto__btn--wa {
+    background: var(--color-whatsapp);
+  }
+  .contacto__btn--ig {
+    background: var(--color-instagram);
+  }
+  .contacto__btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
   }
   .contacto__btn--ghost {
     background: transparent;

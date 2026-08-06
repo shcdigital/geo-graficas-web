@@ -42,12 +42,13 @@ const href = route(`/recursos/${recurso.slug}/`);
   <footer class="card__footer">
     <span class="card__price">{r.precio}</span>
     <div class="card__actions">
-      <a class="card__btn card__btn--wa" href={whatsappUrl(r.title) ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer">
+      <a class="card__btn" href={whatsappUrl(r.title) ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={whatsappUrl(r.title) ? "card__btn--wa" : "card__btn--ig"}>
         <Icon name={whatsappUrl(r.title) ? "whatsapp" : "instagram"} size={15} />
         <span>{whatsappUrl(r.title) ? "Pedir" : "DM"}</span>
       </a>
-      <a class="card__dm" href={instagramDmUrl()} target="_blank" rel="noopener noreferrer" aria-label="Mensaje por Instagram">
-        <Icon name="instagram" size={16} />
+      <a class="card__btn card__btn--ig" href={instagramDmUrl()} target="_blank" rel="noopener noreferrer" aria-label="Mensaje por Instagram">
+        <Icon name="instagram" size={15} />
+        <span>DM</span>
       </a>
     </div>
   </footer>
@@ -161,15 +162,25 @@ const href = route(`/recursos/${recurso.slug}/`);
     color: var(--color-brand-end);
     font-size: var(--font-size-xs);
   }
-  .card__btn--wa {
+  .card__btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     padding: 0.5rem 0.9rem;
     border-radius: var(--radius-full);
-    background: var(--color-whatsapp);
-    color: #fff;
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
+    color: #fff;
+  }
+  .card__btn--wa {
+    background: var(--color-whatsapp);
+  }
+  .card__btn--ig {
+    background: var(--color-instagram);
+  }
+  .card__btn--wa:hover,
+  .card__btn--ig:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 </style>
