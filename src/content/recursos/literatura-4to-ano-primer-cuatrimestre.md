@@ -10,13 +10,14 @@ formato: "PDF"
 paginas: 45
 unidades: ["Mitos","Tragedias Griegas"]
 incluye: ["Edipo Rey y Antígona"]
-precio: "$15000"
+precio: "$8300"
 precioDestacado: true
 coverFrom: "#16a34a"
 coverTo: "#0284c7"
 emoji: "📚"
 destacado: true
 draft: false
+imagen: /img/recursos/literatura-4to-ano-primer-cuatrimestre.png
 ---
 
 Cuadernillo de literatura sobre grecia, con esquemas y cuadros comparativos que hacen más simple la comprensión de los contenidos de 4° año.
