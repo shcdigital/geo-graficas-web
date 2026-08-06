@@ -1,5 +1,5 @@
 ---
-title: "Cuadernillo de Biología: La Célula"
+title: "Test Edit 1786044372815"
 description: "Esquemas, cuadros comparativos y actividades con clave sobre la célula para 2° año."
 pubDate: 2026-07-12
 nivel: "Secundaria"
@@ -8,13 +8,14 @@ asignatura: "Biología"
 materia: "La célula"
 formato: "PDF"
 paginas: 38
-unidades: ["Niveles de organización", "Célula procariota y eucariota", "Organelas", "La membrana", "Nutrición celular"]
-incluye: ["Esquemas", "Cuadros comparativos", "Actividades con clave", "Actividades integradoras"]
+unidades: ["Niveles de organización","Célula procariota y eucariota","Organelas","La membrana","Nutrición celular"]
+incluye: ["Esquemas","Cuadros comparativos","Actividades con clave","Actividades integradoras"]
 precio: "4.200"
-coverFrom: "#34d399"
-coverTo: "#0ea5e9"
-emoji: "🧬"
-destacado: false
+precioDestacado: true
+coverFrom: "#f9ce34"
+coverTo: "#ee2a7b"
+emoji: "📘"
+destacado: true
 draft: false
 ---
 
