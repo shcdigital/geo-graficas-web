@@ -1,0 +1,121 @@
+---
+// src/components/ui/Footer.astro
+import { SITE } from "../../data/site";
+import { instagramPerfilUrl, whatsappUrl, whatsappHabilitado } from "../../data/contacto";
+import Icon from "./Icon.astro";
+import { route, section } from "../../utils/links";
+
+const year = new Date().getFullYear();
+const wa = whatsappHabilitado() ? whatsappUrl() : null;
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <span class="footer__logo">Geo<b>Gráficas</b></span>
+      <p>{SITE.humor}</p>
+      <p class="footer__bio">{SITE.bio}</p>
+    </div>
+
+    <nav class="footer__col" aria-label="Sitio">
+      <h4>Explorar</h4>
+      <ul>
+        <li><a href={route("/")}>Inicio</a></li>
+        <li><a href={section("/", "#catalogo")}>Catálogo</a></li>
+        <li><a href={section("/", "#acerca")}>Nosotras</a></li>
+        <li><a href={section("/", "#contacto")}>Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h4>Contacto</h4>
+      <ul>
+        <li>
+          <a href={instagramPerfilUrl()} target="_blank" rel="noopener noreferrer">
+            @{SITE.instagram}
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </li>
+        {wa && (
+          <li>
+            <a href={wa} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </li>
+        )}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>
+      © {year} {SITE.nombre}. Hecho por docentes, para docentes.
+      <Icon name="instagram" size={16} />
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-border-default);
+    background: var(--color-surface-soft);
+    margin-top: var(--spacing-3xl);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-2xl) var(--container-pad);
+  }
+  .footer__logo {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+  }
+  .footer__logo b {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .footer p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+  .footer h4 {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-md);
+  }
+  .footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--spacing-sm);
+  }
+  .footer a {
+    color: var(--color-text-secondary);
+    transition: color 0.15s ease;
+  }
+  .footer a:hover {
+    color: var(--color-brand-primary);
+  }
+  .footer__bottom {
+    border-top: 1px solid var(--color-border-default);
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+  }
+  .footer__bottom p {
+    margin: 0;
+    display: inline-flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+  }
+  @media (max-width: 760px) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,289 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/ui/Navbar.astro";
+import Hero from "../components/ui/Hero.astro";
+import FeedGrid from "../components/ui/FeedGrid.astro";
+import WhatsAppFloat from "../components/ui/WhatsAppFloat.astro";
+import Footer from "../components/ui/Footer.astro";
+import Icon from "../components/ui/Icon.astro";
+
+import { getCollection } from "astro:content";
+import { SITE } from "../data/site";
+import { contactoUrl, whatsappHabilitado, instagramDmUrl } from "../data/contacto";
+
+const todos = await getCollection("recursos");
+const recursos = todos
+  .filter((r) => !r.data.draft)
+  .sort((a, b) => Number(b.data.destacado) - Number(a.data.destacado) || b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const destacados = recursos.filter((r) => r.data.destacado);
+const waOk = whatsappHabilitado();
+---
+
+<Layout title={`${SITE.nombre} — Cuadernillos y recursos didácticos`}>
+  <Navbar />
+
+  <main id="contenido">
+    <Hero />
+
+    <!-- Catálogo tipo feed de Instagram -->
+    <section class="seccion" id="catalogo" aria-labelledby="titulo-catalogo">
+      <div class="container">
+        <div class="seccion__head">
+          <div>
+            <h2 id="titulo-catalogo" class="seccion__titulo">Catálogo <span class="text-gradient">de cuadernillos</span></h2>
+            <p class="seccion__sub">Recursos listos para usar en el aula. Pedí el tuyo por WhatsApp o Instagram.</p>
+          </div>
+          <a class="seccion__link" href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer">
+            Ver en Instagram <Icon name="instagram" size={16} />
+          </a>
+        </div>
+
+        {destacados.length > 0 && (
+          <>
+            <h3 class="seccion__minititulo">✨ Destacados del feed</h3>
+            <FeedGrid recursos={destacados} />
+          </>
+        )}
+
+        <h3 class="seccion__minititulo">📚 Todo el material</h3>
+        <FeedGrid recursos={recursos} />
+      </div>
+    </section>
+
+    <!-- Cómo pedir -->
+    <section class="seccion seccion--soft" id="como-pedir" aria-labelledby="titulo-como">
+      <div class="container">
+        <h2 id="titulo-como" class="seccion__titulo seccion__titulo--centro">¿Cómo pedir <span class="text-gradient">tu cuadernillo?</span></h2>
+        <div class="pasos">
+          <article class="paso">
+            <span class="paso__num">1</span>
+            <h3>Elegí el material</h3>
+            <p>Recorré el catálogo y encontrá el cuadernillo que buscás para tu aula.</p>
+          </article>
+          <article class="paso">
+            <span class="paso__num">2</span>
+            <h3>Envíanos un mensaje</h3>
+            <p>Escribinos por WhatsApp o Instagram con el nombre del material.</p>
+          </article>
+          <article class="paso">
+            <span class="paso__num">3</span>
+            <h3>Recibilo al instante</h3>
+            <p>Te pasamos el PDF completo por el canal que prefieras, listo para imprimir.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nosotras -->
+    <section class="seccion" id="acerca" aria-labelledby="titulo-nosotras">
+      <div class="container acerca">
+        <div class="acerca__texto">
+          <h2 id="titulo-nosotras" class="seccion__titulo">Somos <span class="text-gradient">Fernanda y Cintia</span></h2>
+          <p>Profesoras de nivel secundario en Buenos Aires. Creemos que el material didáctico tiene que ser <strong>simple, actualizado y completo</strong>: listo para abrir, imprimir y usar en clase.</p>
+          <p>Cada cuadernillo está pensado desde el aula real, probado con estudiantes y revisado año a año.</p>
+          <a class="hero__cta hero__cta--secondary" href={contactoUrl()} target="_blank" rel="noopener noreferrer">
+            Conocé nuestro trabajo
+          </a>
+        </div>
+        <div class="acerca__card" aria-hidden="true">
+          <span class="acerca__emoji">👩‍🏫</span>
+          <p class="acerca__stats"><strong>28K</strong> seguidores en Instagram</p>
+          <p class="acerca__stats"><strong>+137</strong> publicaciones de recursos</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="seccion seccion--gradiente" id="contacto" aria-labelledby="titulo-contacto">
+      <div class="container contacto">
+        <h2 id="titulo-contacto" class="seccion__titulo contacto__titulo">¿Tenés una consulta?</h2>
+        <p class="contacto__sub">Escribinos y te respondemos a la brevedad. Trabajamos por WhatsApp e Instagram.</p>
+        <div class="contacto__botones">
+          <a class="contacto__btn" href={waOk ? contactoUrl() : instagramDmUrl()} target="_blank" rel="noopener noreferrer">
+            <Icon name={waOk ? "whatsapp" : "instagram"} size={22} />
+            <span>{waOk ? "WhatsApp directo" : "Mensaje por Instagram"}</span>
+          </a>
+          <a class="contacto__btn contacto__btn--ghost" href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="instagram" size={22} />
+            <span>@{SITE.instagram}</span>
+          </a>
+        </div>
+        <p class="contacto__mail">
+          o escribinos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <WhatsAppFloat />
+  <Footer />
+</Layout>
+
+<style>
+  .seccion {
+    padding: var(--spacing-3xl) var(--container-pad);
+  }
+  .seccion--soft {
+    background: var(--color-surface-soft);
+  }
+  .seccion--gradiente {
+    background: var(--gradient-brand);
+    color: #fff;
+  }
+  .seccion__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-xl);
+  }
+  .seccion__titulo {
+    font-size: var(--font-size-heading-md);
+    margin-bottom: var(--spacing-sm);
+  }
+  .seccion__titulo--centro {
+    text-align: center;
+  }
+  .seccion__sub {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .seccion__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-brand-primary);
+    white-space: nowrap;
+  }
+  .hero__cta--secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.85rem 1.8rem;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-border-default);
+    background: var(--color-surface-base);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.15s ease;
+  }
+  .hero__cta--secondary:hover {
+    transform: translateY(-2px);
+  }
+  .seccion__minititulo {
+    font-size: var(--font-size-xl);
+    margin: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+  }
+  .paso {
+    background: var(--color-surface-base);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-default);
+  }
+  .paso__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+    color: #fff;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-md);
+  }
+  .paso h3 {
+    font-size: var(--font-size-lg);
+  }
+  .paso p {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .acerca {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: var(--spacing-3xl);
+    align-items: center;
+  }
+  .acerca__texto p {
+    color: var(--color-text-secondary);
+  }
+  .acerca__card {
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    background: var(--gradient-brand-soft);
+    border: 1px solid var(--color-border-default);
+    text-align: center;
+  }
+  .acerca__emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+  }
+  .acerca__stats {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+  }
+  .acerca__stats strong {
+    font-size: var(--font-size-heading-sm);
+    display: block;
+  }
+  .contacto {
+    text-align: center;
+  }
+  .contacto__titulo {
+    font-size: var(--font-size-heading-md);
+  }
+  .contacto__sub {
+    max-width: 520px;
+    margin-inline: auto;
+    opacity: 0.95;
+  }
+  .contacto__botones {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: var(--spacing-xl) 0 var(--spacing-lg);
+  }
+  .contacto__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: #fff;
+    color: #1a1a1a;
+    font-weight: var(--font-weight-semibold);
+    padding: 0.9rem 1.6rem;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+  }
+  .contacto__btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: none;
+  }
+  .contacto__mail {
+    margin: 0;
+    opacity: 0.95;
+  }
+  .contacto__mail a {
+    text-decoration: underline;
+    font-weight: var(--font-weight-semibold);
+  }
+  @media (max-width: 760px) {
+    .acerca {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

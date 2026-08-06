@@ -1,0 +1,33 @@
+---
+// src/components/ui/FeedGrid.astro
+// Grilla tipo "feed de Instagram" que muestra los cuadernillos publicados.
+import type { CollectionEntry } from "astro:content";
+import CardRecurso from "./CardRecurso.astro";
+
+interface Props {
+  recursos: CollectionEntry<"recursos">[];
+}
+
+const { recursos } = Astro.props;
+---
+
+<div class="feed">
+  <ul class="feed__grid">
+    {recursos.map((r) => (
+      <li>
+        <CardRecurso recurso={r} />
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .feed__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+  }
+</style>

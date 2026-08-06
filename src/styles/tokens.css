@@ -1,0 +1,106 @@
+/* src/styles/tokens.css
+ * Design System local de Geo:Gráficas.
+ * Estilo inspirado en el feed de Instagram: superficies claras, acentos
+ * en degradado cálido y gradiente de marca, radios amplios, sombras suaves.
+ * Naming semántico — ver standards/naming.md del workspace.
+ */
+
+:root {
+  /* Superficie */
+  --color-surface-base: #ffffff;
+  --color-surface-raised: #fafafa;
+  --color-surface-highlight: #fff7ed;
+  --color-surface-soft: #f5f6f8;
+
+  /* Texto */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6b7280;
+  --color-text-inverse: #ffffff;
+
+  /* Marca — gradiente "Instagram" (naranja → rosa → violeta) */
+  --gradient-brand: linear-gradient(
+    45deg,
+    #f9ce34 0%,
+    #ee2a7b 50%,
+    #6228d7 100%
+  );
+  --gradient-brand-soft: linear-gradient(
+    45deg,
+    #fce7f3 0%,
+    #ede9fe 100%
+  );
+  --color-brand-start: #f9ce34;
+  --color-brand-mid: #ee2a7b;
+  --color-brand-end: #6228d7;
+  --color-brand-primary: #ee2a7b;
+  --color-brand-primary-hover: #d1206d;
+  --color-brand-secondary: #6228d7;
+
+  /* Estado */
+  --color-state-success: #16a34a;
+  --color-state-warning: #f59e0b;
+  --color-state-error: #dc2626;
+
+  /* Bordes / foco / sombras */
+  --color-border-default: #e5e7eb;
+  --color-focus-ring: #6228d7;
+
+  /* WhatsApp brand */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #1fb659;
+
+  /* Tipografía */
+  --font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-heading-sm: 1.75rem;
+  --font-size-heading-md: 2.5rem;
+  --font-size-heading-lg: 3.25rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.15;
+  --line-height-base: 1.55;
+  --line-height-relaxed: 1.7;
+
+  /* Espaciado */
+  --spacing-2xs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4.5rem;
+
+  /* Radios */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 6px 18px rgba(17, 24, 39, 0.08);
+  --shadow-lg: 0 14px 40px rgba(17, 24, 39, 0.12);
+
+  /* Layout */
+  --container-max-width: 1180px;
+  --container-pad: clamp(1.25rem, 4vw, 2rem);
+}
+
+/* Acentos accesibles sobre gradiente */
+[data-theme="dark"] {
+  --color-surface-base: #15151a;
+  --color-surface-raised: #1e1e26;
+  --color-surface-soft: #18181f;
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-border-default: #2e2e38;
+}

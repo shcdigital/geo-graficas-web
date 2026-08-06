@@ -1,0 +1,107 @@
+---
+// src/components/ui/Navbar.astro
+import { SITE } from "../../data/site";
+import { contactoUrl } from "../../data/contacto";
+import { route, section } from "../../utils/links";
+
+const links = [
+  { href: route("/"), label: "Inicio" },
+  { href: section("/", "#catalogo"), label: "Catálogo" },
+  { href: section("/", "#acerca"), label: "Nosotras" },
+  { href: section("/", "#contacto"), label: "Contacto" },
+];
+---
+
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a class="navbar__brand" href={route("/")}>
+      <span class="navbar__logo" aria-hidden="true">GG</span>
+      <span class="navbar__name">Geo<span>Gráficas</span></span>
+    </a>
+
+    <nav class="navbar__nav" aria-label="Principal">
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} class="navbar__link">{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="navbar__cta" href={contactoUrl()} target="_blank" rel="noopener noreferrer">
+      Pedir
+    </a>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    height: 68px;
+  }
+  .navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+  }
+  .navbar__logo {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    color: #fff;
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    background: var(--gradient-brand);
+  }
+  .navbar__name span {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .navbar__nav ul {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .navbar__link {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    transition: color 0.15s ease;
+  }
+  .navbar__link:hover {
+    color: var(--color-brand-primary);
+  }
+  .navbar__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1.15rem;
+    border-radius: var(--radius-full);
+    color: #fff;
+    font-weight: var(--font-weight-semibold);
+    background: var(--gradient-brand);
+    box-shadow: var(--shadow-sm);
+  }
+  @media (max-width: 640px) {
+    .navbar__nav {
+      display: none;
+    }
+  }
+</style>

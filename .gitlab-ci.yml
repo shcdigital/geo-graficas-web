@@ -1,0 +1,22 @@
+# .gitlab-ci.yml
+# Publica el sitio Astro en GitLab Pages.
+# Regla de GitLab Pages: el job debe llamarse "pages" y el artefacto debe
+# quedar en la carpeta "public/". Astro compila a "dist/", así que aquí se
+# copia dist/ → public/ (patrón canónico de GitLab Pages).
+
+image: node:20
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - npm ci
+    - npm run build
+    - "mkdir -p public && cp -r dist/* public/"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

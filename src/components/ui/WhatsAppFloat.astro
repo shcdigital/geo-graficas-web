@@ -1,0 +1,40 @@
+---
+// src/components/ui/WhatsAppFloat.astro
+// Botón flotante de WhatsApp (o Instagram si no hay número configurado).
+import { whatsappUrl, instagramDmUrl, whatsappHabilitado } from "../../data/contacto";
+import Icon from "./Icon.astro";
+
+const waOk = whatsappHabilitado();
+const href = waOk ? (whatsappUrl() as string) : instagramDmUrl();
+---
+
+<a
+  class="wa-float"
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={waOk ? "Chatear por WhatsApp" : "Enviar mensaje por Instagram"}
+>
+  <Icon name={waOk ? "whatsapp" : "instagram"} size={28} />
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--gradient-brand);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.15s ease;
+  }
+  .wa-float:hover {
+    transform: scale(1.08);
+  }
+</style>
