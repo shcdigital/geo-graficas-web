@@ -223,10 +223,7 @@
           <input type="text" id="slug" placeholder="historia-revolucion-industrial" />
           <span class="hint">Minúsculas, guiones, sin acentos.</span>
         </div>
-        <div class="field">
-          <label for="pubDate">Fecha de publicación *</label>
-          <input type="date" id="pubDate" />
-        </div>
+        <input type="hidden" id="pubDate" />
         <div class="field full">
           <label for="description">Descripción * <span class="hint">(mínimo 20 caracteres)</span></label>
           <textarea id="description" placeholder="Descripción corta que aparece en la tarjeta y en Google."></textarea>
@@ -442,7 +439,7 @@
 
   function validate() {
     let ok = true;
-    const required = ["title", "pubDate", "ciclo", "asignatura", "materia", "paginas"];
+    const required = ["title", "ciclo", "asignatura", "materia", "paginas"];
     required.forEach((id) => {
       const el = $(id);
       const bad = !$val(id);
@@ -497,6 +494,7 @@
       toast("⚠ Revisá los campos marcados en rojo");
       return;
     }
+    $("pubDate").value = new Date().toISOString().split("T")[0];
     $("output").value = buildMarkdown();
     $("download-name").textContent = `${currentSlug()}.md`;
     toast("✅ Archivo generado");
