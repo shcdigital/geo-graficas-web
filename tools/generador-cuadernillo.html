@@ -176,6 +176,7 @@
   }
   .btn-primary { background: var(--gradient-brand); color: #fff; box-shadow: var(--shadow-sm); }
   .btn-success { background: var(--state-success); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
   .btn-ghost { background: #fff; color: var(--text-primary); border: 1px solid var(--border-default); }
 
   .output-label { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; }
@@ -555,11 +556,11 @@
     toast("✅ Descargado");
   });
 
-  // Config para el envío de publicación al administrador.
-  // Mientras no exista backend, la publicación se descarga y se abre el correo
-  // con el archivo adjunto preparado para enviar manualmente.
-  const ADMIN_EMAIL = "geo.graficasdigital@gmail.com";
-  const SUBMIT_ENDPOINT = ""; // Ej: "https://tu-backend.com/geo-graficas/notificacion" (a futuro)
+  // Envío de publicación al administrador vía FormSubmit (sin backend).
+  // En el PRIMER envío FormSubmit manda un correo de activación a ADMIN_EMAIL:
+  // hay que hacer clic en "Activate" y recién ahí llegan los correos.
+  const ADMIN_EMAIL = "shcdigitalsolutions@gmail.com";
+  const SUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${ADMIN_EMAIL}`;
 
   $("btn-send").addEventListener("click", () => {
     if (!validate()) {
@@ -572,34 +573,37 @@
     const msg = $val("adminMsg");
     const asunto = `Nueva publicación — ${$val("title")}`;
 
-    const payload = {
-      tipo: "nuevo-cuadernillo",
-      slug,
-      asunto,
-      markdown: md,
-      mensajeAdmin: msg,
-    };
+    // Multipart con el .md como adjunto y los datos del cuadernillo.
+    const form = new FormData();
+    form.append("_subject", asunto);
+    form.append("_template", "table");
+    form.append("archivo", new Blob([md], { type: "text/markdown;charset=utf-8" }), `${slug}.md`);
+    form.append("Slug", slug);
+    form.append("Título", $val("title"));
+    form.append("Asignatura", $val("asignatura"));
+    form.append("Precio", $val("precio") || "Consultar");
+    form.append("Mensaje del administrador", msg || "—");
 
-    if (SUBMIT_ENDPOINT) {
-      // A futuro: POST a un backend que envía el mail con el .md adjunto.
-      fetch(SUBMIT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    $("btn-send").disabled = true;
+    $("btn-send").textContent = "Enviando…";
+
+    fetch(SUBMIT_ENDPOINT, { method: "POST", body: form })
+      .then((r) => r.json())
+      .then((res) => {
+        if (!res.success) throw new Error(res.message || "Error de FormSubmit");
+        toast("✅ Publicación enviada al administrador");
+        $("output").value = md;
+        $("download-name").textContent = `${slug}.md`;
       })
-        .then((r) => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          toast("✅ Publicación enviada al administrador");
-        })
-        .catch((e) => {
-          console.error(e);
-          toast("⚠ No se pudo enviar. Se abrió el correo para enviarlo manual.");
-          abrirCorreoFallback(payload);
-        });
-      return;
-    }
-
-    abrirCorreoFallback(payload);
+      .catch((e) => {
+        console.error(e);
+        toast("⚠ No se pudo enviar. Se abrió el correo para enviarlo manual.");
+        abrirCorreoFallback({ asunto, slug, markdown: md, mensajeAdmin: msg });
+      })
+      .finally(() => {
+        $("btn-send").disabled = false;
+        $("btn-send").textContent = "Enviar publicación";
+      });
   });
 
   function abrirCorreoFallback(payload) {
