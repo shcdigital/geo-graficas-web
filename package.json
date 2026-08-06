@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run fetch:prices && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "fetch:prices": "node scripts/fetch-prices.js"
   },
   "dependencies": {
     "astro": "^4.16.18"

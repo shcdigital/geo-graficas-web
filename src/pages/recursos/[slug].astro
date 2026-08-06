@@ -9,6 +9,7 @@ import Icon from "../../components/ui/Icon.astro";
 import { getCollection } from "astro:content";
 import { whatsappUrl, instagramDmUrl } from "../../data/contacto";
 import { section } from "../../utils/links";
+import { getPrice } from "../../utils/prices";
 
 export async function getStaticPaths() {
   const recursos = await getCollection("recursos");
@@ -21,6 +22,7 @@ const { recurso } = Astro.props;
 const r = recurso.data;
 const { Content } = await recurso.render();
 const wa = whatsappUrl(r.title);
+const precioFormateado = getPrice(r.precio);
 ---
 
 <Layout
@@ -70,7 +72,7 @@ const wa = whatsappUrl(r.title);
             </div>
           </dl>
 
-          <p class="detalle__precio">{r.precio}</p>
+          <p class="detalle__precio">{precioFormateado}</p>
 
           <div class="detalle__botones">
             <a class="detalle__btn" href={wa ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={wa ? "detalle__btn--wa" : "detalle__btn--ig"}>

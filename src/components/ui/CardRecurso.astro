@@ -5,6 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import Icon from "./Icon.astro";
 import { instagramDmUrl, whatsappUrl } from "../../data/contacto";
 import { route } from "../../utils/links";
+import { getPrice } from "../../utils/prices";
 
 interface Props {
   recurso: CollectionEntry<"recursos">;
@@ -13,6 +14,7 @@ interface Props {
 const { recurso } = Astro.props;
 const r = recurso.data;
 const href = route(`/recursos/${recurso.slug}/`);
+const precioFormateado = getPrice(r.precio);
 ---
 
 <article class="card">
@@ -40,7 +42,7 @@ const href = route(`/recursos/${recurso.slug}/`);
   </div>
 
   <footer class="card__footer">
-    <span class="card__price">{r.precio}</span>
+    <span class="card__price">{precioFormateado}</span>
     <div class="card__actions">
       <a class="card__btn" href={whatsappUrl(r.title) ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={whatsappUrl(r.title) ? "card__btn--wa" : "card__btn--ig"}>
         <Icon name={whatsappUrl(r.title) ? "whatsapp" : "instagram"} size={15} />
