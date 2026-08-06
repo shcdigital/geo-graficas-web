@@ -6,7 +6,7 @@ didácticos para nivel secundario (Fernanda y Cintia, Buenos Aires, Argentina).
 Construido con **Astro** y publicado en **GitLab Pages** siguiendo la plataforma
 de agentes del [AI Workspace](../ai-workspace).
 
-Sitio en vivo: <https://pabloberthold.gitlab.io/geo-graficas-web/>
+Sitio en vivo: <https://geo-graficas-web-d6a153.gitlab.io/>
 
 ## Características
 
