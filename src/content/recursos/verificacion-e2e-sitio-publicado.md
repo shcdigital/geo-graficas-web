@@ -1,5 +1,5 @@
 ---
-title: "Verificación E2E Sitio Publicado"
+title: "Verificación E2E MODIFICADA"
 description: "Cuadernillo temporal para verificar el flujo completo: crear en el panel, commit en GitLab y visibilidad en el sitio publicado de Geo.Gráficas."
 pubDate: 2026-08-06
 nivel: "Secundaria"
@@ -10,7 +10,7 @@ formato: "PDF"
 paginas: 10
 unidades: []
 incluye: []
-precio: "999"
+precio: "1350"
 precioDestacado: false
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"
