@@ -16,5 +16,5 @@ export const SITE = {
   instagramDmUrl: "https://ig.me/m/geo.graficas",
   // Número de WhatsApp con código de país, SOLO dígitos. Ej: "5491122334455"
   // Dejar "" para ocultar WhatsApp (cae a DM de Instagram).
-  whatsapp: "",
+  whatsapp: "541155156610",
 } as const;
