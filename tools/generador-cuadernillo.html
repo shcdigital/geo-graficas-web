@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Generador de Cuadernillos — Geo.Gráficas</title>
+<style>
+  :root {
+    --surface-base: #ffffff;
+    --surface-raised: #fafafa;
+    --surface-soft: #f5f6f8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b7280;
+    --brand-start: #f9ce34;
+    --brand-mid: #ee2a7b;
+    --brand-end: #6228d7;
+    --gradient-brand: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 50%, #6228d7 100%);
+    --border-default: #e5e7eb;
+    --state-success: #16a34a;
+    --state-error: #dc2626;
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 1px 2px rgba(17,24,39,0.06);
+    --shadow-md: 0 6px 18px rgba(17,24,39,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--text-primary);
+    background: var(--surface-base);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { line-height: 1.2; margin: 0 0 1rem; font-weight: 700; }
+  .page { max-width: 1020px; margin: 0 auto; padding: 2rem clamp(1.25rem, 4vw, 2rem) 4rem; }
+
+  /* Banner SHC.DIGITAL */
+  .shc-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: clamp(1.4rem, 4vw, 2.6rem) 1rem;
+    width: 100%;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 6vw, 4rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .shc-banner .dot { color: #ff0000; }
+  @media (max-width: 480px) {
+    .shc-banner { font-size: clamp(1.1rem, 7vw, 1.8rem); letter-spacing: 0.06em; }
+  }
+
+  .header { margin-bottom: 1.5rem; }
+  .header h1 {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.25rem;
+  }
+  .header p { color: var(--text-secondary); margin: 0; }
+  .header p code { background: var(--surface-soft); padding: 0.1rem 0.35rem; border-radius: 6px; }
+
+  .card {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .card h2 {
+    font-size: 1.1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-default);
+    margin-bottom: 1.25rem;
+  }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-weight: 600; font-size: 0.875rem; }
+  .hint { font-size: 0.75rem; color: var(--text-secondary); font-weight: 400; }
+  input[type="text"], input[type="date"], input[type="number"], select, textarea {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: inherit;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: 3px solid var(--brand-end); outline-offset: 1px; }
+  textarea { resize: vertical; min-height: 70px; }
+  .invalid { border-color: var(--state-error) !important; outline: 2px solid var(--state-error) !important; }
+  .error-msg { color: var(--state-error); font-size: 0.78rem; }
+
+  .checkbox-row { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .checkbox { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; }
+  .checkbox input { width: 1.05rem; height: 1.05rem; accent-color: var(--brand-mid); }
+
+  .chip-input { display: flex; gap: 0.5rem; }
+  .chip-input input { flex: 1; }
+  .chip-input button {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-brand);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; min-height: 1.5rem; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.75rem;
+    background: var(--surface-soft);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+  }
+  .chip button {
+    border: none; background: none; color: var(--text-secondary);
+    font-size: 1rem; cursor: pointer; line-height: 1; font-weight: 700;
+  }
+  .chip button:hover { color: var(--state-error); }
+
+  .palettes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+  @media (max-width: 720px) { .palettes { grid-template-columns: 1fr; } }
+  .palette {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.5rem 0.75rem; border: 2px solid transparent;
+    border-radius: var(--radius-sm); background: #fff; cursor: pointer; font-size: 0.82rem;
+  }
+  .palette:hover { border-color: var(--border-default); }
+  .palette.selected { border-color: var(--brand-mid); font-weight: 600; }
+  .palette .swatch { width: 100%; height: 14px; border-radius: 6px; }
+
+  .preview-media {
+    position: relative; display: grid; place-items: center;
+    aspect-ratio: 4/3; border-radius: var(--radius-md); overflow: hidden;
+    border: 1px solid var(--border-default);
+  }
+  .preview-media .emoji { font-size: 3rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18)); }
+  .preview-media .materia {
+    position: absolute; left: 0.75rem; bottom: 0.75rem; color: #fff;
+    font-weight: 600; font-size: 0.875rem; text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+  .preview-chip {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    padding: 0.25rem 0.65rem; font-size: 0.7rem; font-weight: 700; color: #fff;
+    border-radius: var(--radius-full); background: var(--gradient-brand);
+  }
+
+  .actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .btn {
+    border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem;
+    font-weight: 600; padding: 0.75rem 1.4rem; border-radius: var(--radius-full);
+  }
+  .btn-primary { background: var(--gradient-brand); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn-ghost { background: #fff; color: var(--text-primary); border: 1px solid var(--border-default); }
+
+  .output-label { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  #output {
+    width: 100%; min-height: 320px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.82rem; padding: 1rem;
+    border: 1px solid var(--border-default); border-radius: var(--radius-sm);
+    background: #111; color: #e5e7eb; white-space: pre; resize: vertical;
+  }
+  #toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-full); box-shadow: var(--shadow-md);
+    font-weight: 500; font-size: 0.9rem; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease; z-index: 50;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+  <!-- Banner de marca -->
+  <div class="shc-banner">Coding by&nbsp;SHC<span class="dot">.</span>DIGITAL</div>
+
+  <main class="page">
+    <header class="header">
+      <h1>Generador de cuadernillos</h1>
+      <p>
+        Completá los campos y generá el archivo <code>.md</code> para agregarlo a
+        <code>src/content/recursos/</code>.
+      </p>
+    </header>
+
+    <!-- Identificación -->
+    <section class="card">
+      <h2>Identificación</h2>
+      <div class="grid">
+        <div class="field full">
+          <label for="title">Título *</label>
+          <input type="text" id="title" placeholder="Cuadernillo de Historia — Revolución Industrial" />
+          <span class="hint">Si dejás vacío el slug, se genera automáticamente desde el título.</span>
+        </div>
+        <div class="field">
+          <label for="slug">Slug (nombre del archivo)</label>
+          <input type="text" id="slug" placeholder="historia-revolucion-industrial" />
+          <span class="hint">Minúsculas, guiones, sin acentos.</span>
+        </div>
+        <div class="field">
+          <label for="pubDate">Fecha de publicación *</label>
+          <input type="date" id="pubDate" />
+        </div>
+        <div class="field full">
+          <label for="description">Descripción * <span class="hint">(mínimo 20 caracteres)</span></label>
+          <textarea id="description" placeholder="Descripción corta que aparece en la tarjeta y en Google."></textarea>
+          <span class="error-msg" id="desc-error" hidden>Tiene que tener al menos 20 caracteres.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clasificación -->
+    <section class="card">
+      <h2>Clasificación</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="nivel">Nivel *</label>
+          <select id="nivel">
+            <option value="Secundaria">Secundaria</option>
+            <option value="Secundaria Básica">Secundaria Básica</option>
+            <option value="Secundaria Superior">Secundaria Superior</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ciclo">Ciclo *</label>
+          <input type="text" id="ciclo" placeholder="Ciclo Básico · 2° y 3° año" />
+        </div>
+        <div class="field">
+          <label for="asignatura">Asignatura *</label>
+          <input type="text" id="asignatura" placeholder="Matemática" />
+        </div>
+        <div class="field">
+          <label for="materia">Materia *</label>
+          <input type="text" id="materia" placeholder="Funciones" />
+        </div>
+        <div class="field">
+          <label for="paginas">Páginas * <span class="hint">(entero mayor a 0)</span></label>
+          <input type="number" id="paginas" min="1" step="1" placeholder="46" />
+        </div>
+        <div class="field">
+          <label for="precio">Precio</label>
+          <input type="text" id="precio" placeholder="AR$ 4.500" />
+          <span class="hint">Vacío = "Consultar"</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contenido -->
+    <section class="card">
+      <h2>Contenido del cuadernillo</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Unidades</label>
+          <div class="chips" id="unidad-chips"></div>
+          <div class="chip-input">
+            <input type="text" id="unidad-input" placeholder="Ej: Funciones lineales" />
+            <button type="button" data-add="unidad">Agregar</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Incluye</label>
+          <div class="chips" id="incluye-chips"></div>
+          <div class="chip-input">
+            <input type="text" id="incluye-input" placeholder="Ej: Teoría simplificada" />
+            <button type="button" data-add="incluye">Agregar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portada -->
+    <section class="card">
+      <h2>Portada y personalización</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="emoji">Emoji de portada</label>
+          <select id="emoji">
+            <option value="📘">📘 Libro</option>
+            <option value="📈">📈 Gráfico</option>
+            <option value="🔬">🔬 Ciencia</option>
+            <option value="📜">📜 Historia</option>
+            <option value="✏️">✏️ Escritura</option>
+            <option value="📊">📊 Datos</option>
+            <option value="🧪">🧪 Laboratorio</option>
+            <option value="📚">📚 Libros</option>
+            <option value="🌍">🌍 Geografía</option>
+            <option value="🧮">🧮 Matemática</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Degradado de portada</label>
+          <div class="palettes" id="palettes">
+            <button type="button" class="palette selected" data-from="#f9ce34" data-to="#ee2a7b"><span class="swatch" style="background:linear-gradient(45deg,#f9ce34,#ee2a7b)"></span>Sol → Rosa</button>
+            <button type="button" class="palette" data-from="#ee2a7b" data-to="#6228d7"><span class="swatch" style="background:linear-gradient(45deg,#ee2a7b,#6228d7)"></span>Rosa → Violeta</button>
+            <button type="button" class="palette" data-from="#6228d7" data-to="#2563eb"><span class="swatch" style="background:linear-gradient(45deg,#6228d7,#2563eb)"></span>Violeta → Azul</button>
+            <button type="button" class="palette" data-from="#16a34a" data-to="#0284c7"><span class="swatch" style="background:linear-gradient(45deg,#16a34a,#0284c7)"></span>Verde → Cian</button>
+            <button type="button" class="palette" data-from="#f97316" data-to="#dc2626"><span class="swatch" style="background:linear-gradient(45deg,#f97316,#dc2626)"></span>Naranja → Rojo</button>
+            <button type="button" class="palette" data-from="#db2777" data-to="#f59e0b"><span class="swatch" style="background:linear-gradient(45deg,#db2777,#f59e0b)"></span>Magenta → Ámbar</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Opciones</label>
+          <div class="checkbox-row">
+            <label class="checkbox"><input type="checkbox" id="destacado" /> Destacado</label>
+            <label class="checkbox"><input type="checkbox" id="precioDestacado" /> Precio destacado</label>
+            <label class="checkbox"><input type="checkbox" id="draft" /> Draft (oculto)</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Vista previa</label>
+          <div class="preview-media" id="preview" style="background:linear-gradient(135deg,#f9ce34,#ee2a7b)">
+            <span class="preview-chip" hidden>Destacado</span>
+            <span class="emoji" id="preview-emoji">📘</span>
+            <span class="materia" id="preview-materia">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cuerpo -->
+    <section class="card">
+      <h2>Cuerpo (descripción larga)</h2>
+      <div class="field full">
+        <textarea id="body" rows="4" placeholder="Descripción larga en Markdown para la página de detalle."></textarea>
+      </div>
+    </section>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btn-generate">Generar .md</button>
+      <button type="button" class="btn btn-ghost" id="btn-copy">Copiar</button>
+      <button type="button" class="btn btn-ghost" id="btn-download">Descargar .md</button>
+      <button type="button" class="btn btn-ghost" id="btn-clear">Limpiar</button>
+    </div>
+
+    <div class="output-label">Archivo generado (<span id="download-name">cuadernillo.md</span>)</div>
+    <textarea id="output" readonly>— El archivo se genera acá. —</textarea>
+  </main>
+
+  <div id="toast" role="status"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const $val = (id) => $(id).value.trim();
+
+  const lists = { unidad: [], incluye: [] };
+  let palFrom = "#f9ce34", palTo = "#ee2a7b";
+
+  function slugFrom(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  }
+
+  function quote(v) {
+    const s = String(v).trim();
+    if (/[:#\[\]{},&*!|>'"]|\s/.test(s)) return `"${s.replace(/"/g, '\\"')}"`;
+    return s;
+  }
+
+  function listYaml(arr) {
+    return arr.length ? "\n" + arr.map((i) => `  - ${quote(i)}`).join("\n") : "[]";
+  }
+
+  function renderChips(name) {
+    $(`${name}-chips`).innerHTML = lists[name]
+      .map((item, i) => `<span class="chip">${item} <button type="button" data-remove="${name}" data-index="${i}" aria-label="Quitar">×</button></span>`)
+      .join("");
+  }
+
+  document.querySelectorAll("[data-add]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.add;
+      const input = $(`${name}-input`);
+      const v = input.value.trim();
+      if (!v) return;
+      lists[name].push(v);
+      input.value = "";
+      renderChips(name);
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    const rm = e.target.closest("[data-remove]");
+    if (!rm) return;
+    lists[rm.dataset.remove].splice(Number(rm.dataset.index), 1);
+    renderChips(rm.dataset.remove);
+  });
+
+  document.querySelectorAll(".palette").forEach((p) => {
+    p.addEventListener("click", () => {
+      document.querySelectorAll(".palette").forEach((x) => x.classList.remove("selected"));
+      p.classList.add("selected");
+      palFrom = p.dataset.from;
+      palTo = p.dataset.to;
+      updatePreview();
+    });
+  });
+
+  function updatePreview() {
+    const media = $("preview");
+    media.style.background = `linear-gradient(135deg, ${palFrom}, ${palTo})`;
+    $("preview-emoji").textContent = $val("emoji") || "📘";
+    $("preview-materia").textContent = $val("materia") || "—";
+    $("preview").querySelector(".preview-chip").hidden = !$("destacado").checked;
+  }
+
+  ["emoji", "materia", "destacado"].forEach((id) => $(id).addEventListener("change", updatePreview));
+  $("title").addEventListener("input", () => {
+    if (!$("slug").value) $("slug").placeholder = slugFrom($("title").value) || "tu-cuadernillo";
+  });
+
+  function currentSlug() {
+    const manual = $val("slug");
+    return slugFrom(manual || $val("title") || "cuadernillo");
+  }
+
+  function validate() {
+    let ok = true;
+    const required = ["title", "pubDate", "ciclo", "asignatura", "materia", "paginas"];
+    required.forEach((id) => {
+      const el = $(id);
+      const bad = !$val(id);
+      el.classList.toggle("invalid", bad);
+      if (bad) ok = false;
+    });
+    const desc = $("description");
+    const descBad = desc.value.trim().length < 20;
+    desc.classList.toggle("invalid", descBad);
+    $("desc-error").hidden = !descBad;
+    if (descBad) ok = false;
+
+    const pag = Number($("paginas").value);
+    if (!$val("paginas") || !Number.isInteger(pag) || pag <= 0) ok = false;
+    return ok;
+  }
+
+  function buildMarkdown() {
+    const body = $val("body");
+    const precio = $val("precio") || "Consultar";
+    const precioDest = $("precioDestacado").checked;
+    const lines = [
+      "---",
+      `title: ${quote($val("title"))}`,
+      `description: ${quote($val("description"))}`,
+      `pubDate: ${$val("pubDate")}`,
+      `nivel: "${$val("nivel")}"`,
+      `ciclo: ${quote($val("ciclo"))}`,
+      `asignatura: ${quote($val("asignatura"))}`,
+      `materia: ${quote($val("materia"))}`,
+      `formato: "PDF"`,
+      `paginas: ${Number($("paginas").value)}`,
+      `unidades:${listYaml(lists.unidad)}`,
+      `incluye:${listYaml(lists.incluye)}`,
+      `precio: ${quote(precio)}`,
+      `precioDestacado: ${precioDest}`,
+      `coverFrom: "${palFrom}"`,
+      `coverTo: "${palTo}"`,
+      `emoji: "${$val("emoji") || "📘"}"`,
+      `destacado: ${$("destacado").checked}`,
+      `draft: ${$("draft").checked}`,
+      "---",
+      "",
+      body || "Escribí acá la descripción larga en Markdown…",
+      "",
+    ];
+    return lines.join("\n");
+  }
+
+  function generate() {
+    if (!validate()) {
+      toast("⚠ Revisá los campos marcados en rojo");
+      return;
+    }
+    $("output").value = buildMarkdown();
+    $("download-name").textContent = `${currentSlug()}.md`;
+    toast("✅ Archivo generado");
+  }
+
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  $("btn-generate").addEventListener("click", generate);
+  $("btn-clear").addEventListener("click", () => {
+    document.querySelectorAll("input[type=text], input[type=date], input[type=number], textarea, select")
+      .forEach((el) => { el.value = ""; });
+    document.querySelectorAll("input[type=checkbox]").forEach((el) => { el.checked = false; });
+    lists.unidad = []; lists.incluye = [];
+    renderChips("unidad"); renderChips("incluye");
+    $("slug").placeholder = "tu-cuadernillo";
+    $("nivel").value = "Secundaria";
+    $("precio").placeholder = "";
+    $("output").value = "— El archivo se genera acá. —";
+    $("download-name").textContent = "cuadernillo.md";
+    updatePreview();
+  });
+
+  $("btn-copy").addEventListener("click", async () => {
+    const v = $("output").value;
+    if (!v || v.startsWith("—")) { toast("⚠ Generá el archivo primero"); return; }
+    try {
+      await navigator.clipboard.writeText(v);
+      toast("✅ Copiado al portapapeles");
+    } catch {
+      $("output").select();
+      document.execCommand("copy");
+      toast("✅ Copiado (seleccioná y copiá)");
+    }
+  });
+
+  $("btn-download").addEventListener("click", () => {
+    const v = $("output").value;
+    if (!v || v.startsWith("—")) { toast("⚠ Generá el archivo primero"); return; }
+    const blob = new Blob([v], { type: "text/markdown;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${currentSlug()}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    toast("✅ Descargado");
+  });
+
+  updatePreview();
+</script>
+</body>
+</html>
