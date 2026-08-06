@@ -11,11 +11,11 @@ paginas: 38
 unidades: ["Niveles de organización","Célula procariota y eucariota","Organelas","La membrana","Nutrición celular"]
 incluye: ["Esquemas","Cuadros comparativos","Actividades con clave","Actividades integradoras"]
 precio: "4.200"
-precioDestacado: false
+precioDestacado: true
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"
 emoji: "📘"
-destacado: false
+destacado: true
 draft: false
 ---
 
