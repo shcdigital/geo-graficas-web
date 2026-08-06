@@ -1,12 +1,12 @@
 // astro.config.mjs
-// Target: GitLab Pages (https://pabloberthold.gitlab.io/geo-graficas-web/).
-// - site: URL final pública.
-// - base: "/<proyecto>/" para subpath de proyecto en GitLab Pages.
+// Target: GitLab Pages — este proyecto usa DOMINIO ÚNICO de GitLab
+//   (https://geo-graficas-web-d6a153.gitlab.io) y se sirve en la RAÍZ.
+//   Por eso site = dominio único y base = "/".
 
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://pabloberthold.gitlab.io/geo-graficas-web",
-  base: "/geo-graficas-web/",
+  site: "https://geo-graficas-web-d6a153.gitlab.io",
+  base: "/",
   integrations: [],
 });
