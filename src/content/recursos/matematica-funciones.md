@@ -8,14 +8,14 @@ asignatura: "Matemática"
 materia: "Funciones"
 formato: "PDF"
 paginas: 46
-unidades: ["Concepto de función", "Dominio y codominio", "Gráficos cartesianos", "Funciones lineales", "Funciones cuadráticas"]
-incluye: ["Teoría simplificada", "Ejemplos resueltos paso a paso", "Actividades con respuesta", "Auto-evaluaciones"]
+unidades: ["Concepto de función","Dominio y codominio","Gráficos cartesianos","Funciones lineales","Funciones cuadráticas"]
+incluye: ["Teoría simplificada","Ejemplos resueltos paso a paso","Actividades con respuesta","Auto-evaluaciones"]
 precio: "AR$ 4.500"
 precioDestacado: true
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"
 emoji: "📈"
-destacado: true
+destacado: false
 draft: false
 ---
 
