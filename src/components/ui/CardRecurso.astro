@@ -15,6 +15,9 @@ const { recurso } = Astro.props;
 const r = recurso.data;
 const href = route(`/recursos/${recurso.slug}/`);
 const precioFormateado = getPrice(r.precio);
+
+// Extraer valor numérico del precio (ej: "$ 4.500" -> 4500)
+const precioNumerico = parseInt(precioFormateado.replace(/[^0-9]/g, ''), 10);
 ---
 
 <article class="card">
@@ -44,6 +47,10 @@ const precioFormateado = getPrice(r.precio);
   <footer class="card__footer">
     <span class="card__price">{precioFormateado}</span>
     <div class="card__actions">
+      <button class="card__btn card__btn--cart" @click={`$store.cart.add({slug: "${r.precio}", title: "${r.title.replace(/"/g, '\\"')}", price: ${precioNumerico}, qty: 1})`}>
+        <Icon name="cart" size={15} />
+        <span>Agregar</span>
+      </button>
       <a class="card__btn" href={whatsappUrl(r.title) ?? instagramDmUrl()} target="_blank" rel="noopener noreferrer" class:list={whatsappUrl(r.title) ? "card__btn--wa" : "card__btn--ig"}>
         <Icon name={whatsappUrl(r.title) ? "whatsapp" : "instagram"} size={15} />
         <span>{whatsappUrl(r.title) ? "Pedir" : "DM"}</span>

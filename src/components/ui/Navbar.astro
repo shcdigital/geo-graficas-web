@@ -3,6 +3,7 @@
 import { SITE } from "../../data/site";
 import { contactoUrl } from "../../data/contacto";
 import { route, section } from "../../utils/links";
+import Icon from "./Icon.astro";
 
 const links = [
   { href: route("/"), label: "Inicio" },
@@ -12,7 +13,7 @@ const links = [
 ];
 ---
 
-<header class="navbar">
+<header class="navbar" x-data="{ cartOpen: false }">
   <div class="container navbar__inner">
     <a class="navbar__brand" href={route("/")}>
       <img class="navbar__logo" src={`${import.meta.env.BASE_URL}logo.png`} alt="" width={38} height={38} loading="eager" />
@@ -29,10 +30,73 @@ const links = [
       </ul>
     </nav>
 
-    <a class="navbar__cta" href={contactoUrl()} target="_blank" rel="noopener noreferrer">
-      Pedir
-    </a>
+    <div class="navbar__actions">
+      <a class="navbar__cta" href={contactoUrl()} target="_blank" rel="noopener noreferrer">
+        Pedir
+      </a>
+
+      <!-- Cart Button -->
+      <div class="navbar__cart" x-data="{ get count() { return $store.cart.count } }">
+        <button class="navbar__cart-btn" @click="cartOpen = !cartOpen" aria-label="Carrito" aria-expanded="false" :aria-expanded="cartOpen.toString()">
+          <Icon name="cart" size={20} />
+          <span class="navbar__cart-count" x-show="count > 0" x-text="count"></span>
+        </button>
+
+        <!-- Cart Dropdown -->
+        <div class="navbar__cart-dropdown" x-show="cartOpen" x-transition @click.outside="cartOpen = false" @keydown.escape.window="cartOpen = false">
+          <div class="navbar__cart-header">
+            <h3>Carrito</h3>
+            <button class="navbar__cart-close" @click="cartOpen = false" aria-label="Cerrar">
+              <Icon name="x" size={18} />
+            </button>
+          </div>
+
+          <div class="navbar__cart-items" x-show="$store.cart.items.length > 0">
+            <template x-for="item in $store.cart.items" :key="item.slug">
+              <div class="navbar__cart-item">
+                <div class="navbar__cart-item-info">
+                  <span class="navbar__cart-item-title" x-text="item.title"></span>
+                  <div class="navbar__cart-item-controls">
+                    <input type="number" min="1" x-model.number="item.qty" @change="$store.cart.updateQty(item.slug, item.qty)" class="navbar__cart-qty" />
+                    <span class="navbar__cart-item-price" x-text="formatPrice(item.price * item.qty)"></span>
+                  </div>
+                </div>
+                <button class="navbar__cart-remove" @click="$store.cart.remove(item.slug)" aria-label="Eliminar">
+                  <Icon name="trash" size={14} />
+                </button>
+              </div>
+            </template>
+          </div>
+
+          <div class="navbar__cart-empty" x-show="$store.cart.items.length === 0">
+            <p>Tu carrito está vacío</p>
+          </div>
+
+          <div class="navbar__cart-footer" x-show="$store.cart.items.length > 0">
+            <div class="navbar__cart-total">
+              <span>Total</span>
+              <strong x-text="$store.cart.formattedTotal"></strong>
+            </div>
+            <button class="navbar__cart-checkout" @click="$store.cart.checkout(prompt('Email para la confirmación:'))">
+              Pagar con MercadoPago
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    function formatPrice(amount) {
+      return new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+        minimumFractionDigits: 0,
+      }).format(amount);
+    }
+    // Make it globally available for Alpine
+    window.formatPrice = formatPrice;
+  </script>
 </header>
 
 <style>
@@ -97,9 +161,229 @@ const links = [
     background: var(--gradient-brand);
     box-shadow: var(--shadow-sm);
   }
+
+  .navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  /* Cart Styles */
+  .navbar__cart {
+    position: relative;
+  }
+
+  .navbar__cart-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    position: relative;
+  }
+  .navbar__cart-btn:hover {
+    background: var(--color-surface-soft);
+  }
+  .navbar__cart-btn:focus-visible {
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 2px;
+  }
+
+  .navbar__cart-count {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--radius-full);
+    background: var(--color-brand-primary);
+    color: #fff;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar__cart-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 360px;
+    max-width: calc(100vw - 24px);
+    background: var(--color-surface-base);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    z-index: 200;
+  }
+
+  .navbar__cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+  .navbar__cart-header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+  .navbar__cart-close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+  .navbar__cart-close:hover {
+    background: var(--color-surface-soft);
+    color: var(--color-text-primary);
+  }
+
+  .navbar__cart-items {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: var(--spacing-sm);
+  }
+
+  .navbar__cart-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background 0.15s ease;
+  }
+  .navbar__cart-item:hover {
+    background: var(--color-surface-soft);
+  }
+
+  .navbar__cart-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .navbar__cart-item-title {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar__cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+  }
+
+  .navbar__cart-qty {
+    width: 56px;
+    height: 32px;
+    padding: 0 var(--spacing-xs);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    text-align: center;
+  }
+  .navbar__cart-qty:focus-visible {
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 1px;
+  }
+
+  .navbar__cart-item-price {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-brand-primary);
+    white-space: nowrap;
+  }
+
+  .navbar__cart-remove {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .navbar__cart-remove:hover {
+    background: var(--color-surface-soft);
+    color: var(--color-error);
+  }
+
+  .navbar__cart-empty {
+    padding: var(--spacing-xl);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+
+  .navbar__cart-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .navbar__cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .navbar__cart-checkout {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand);
+    color: #fff;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .navbar__cart-checkout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  .navbar__cart-checkout:focus-visible {
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 2px;
+  }
+
   @media (max-width: 640px) {
     .navbar__nav {
       display: none;
+    }
+    .navbar__cart-dropdown {
+      right: -80px;
+      width: 300px;
     }
   }
 </style>

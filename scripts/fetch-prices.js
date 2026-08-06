@@ -2,7 +2,7 @@
 // Fetches prices from geo-graficas-pay worker at build time
 // Outputs to src/data/prices.json for Astro components to import
 
-const PRICES_URL = process.env.PRICES_URL || "https://geo-graficas-pay.pablopunk.workers.dev/prices";
+const PRICES_URL = process.env.PRICES_URL || "https://geo-graficas-pay.pablo-berthold.workers.dev/prices";
 const OUTPUT_PATH = "src/data/prices.json";
 
 async function fetchPrices() {
