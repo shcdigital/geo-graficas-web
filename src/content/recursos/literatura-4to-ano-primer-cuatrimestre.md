@@ -8,12 +8,9 @@ asignatura: Literatura
 materia: Literatura
 formato: "PDF"
 paginas: 45
-unidades:
-  - Mitos
-  - "Tragedias Griegas"
-incluye:
-  - "Edipo Rey y Antígona"
-precio: $6900
+unidades: ["Mitos","Tragedias Griegas"]
+incluye: ["Edipo Rey y Antígona"]
+precio: $15000
 precioDestacado: true
 coverFrom: "#16a34a"
 coverTo: "#0284c7"
