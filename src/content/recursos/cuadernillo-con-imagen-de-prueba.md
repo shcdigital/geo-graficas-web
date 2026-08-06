@@ -17,7 +17,6 @@ coverTo: "#ee2a7b"
 emoji: "📘"
 destacado: false
 draft: false
-imagen: /img/recursos/cuadernillo-con-imagen-de-prueba.png
 ---
 
 # Imagen
