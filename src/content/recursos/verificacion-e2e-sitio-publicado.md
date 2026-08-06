@@ -4,13 +4,13 @@ description: "Cuadernillo temporal para verificar el flujo completo: crear en el
 pubDate: 2026-08-06
 nivel: "Secundaria"
 ciclo: "Ciclo Básico · 1° año"
-asignatura: Prueba
-materia: E2E
+asignatura: "Prueba"
+materia: "E2E"
 formato: "PDF"
 paginas: 10
 unidades: []
 incluye: []
-precio: 999
+precio: "999"
 precioDestacado: false
 coverFrom: "#f9ce34"
 coverTo: "#ee2a7b"
