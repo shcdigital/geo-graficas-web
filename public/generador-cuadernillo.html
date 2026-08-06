@@ -369,6 +369,23 @@
 
   <div id="toast" role="status"></div>
 
+  <!-- Form oculto de envío a FormSubmit (multipart real para adjuntar el .md).
+       target=iframe para no salir de la página. -->
+  <form id="fs-form" method="POST"
+        action="https://formsubmit.co/shcdigitalsolutions@gmail.com"
+        enctype="multipart/form-data" target="fs-iframe" style="display:none">
+    <input type="hidden" name="_subject" id="fs-subject" />
+    <input type="hidden" name="_template" value="table" />
+    <input type="hidden" name="_captcha" value="false" />
+    <input type="hidden" name="Slug" id="fs-slug" />
+    <input type="hidden" name="Título" id="fs-titulo" />
+    <input type="hidden" name="Asignatura" id="fs-asignatura" />
+    <input type="hidden" name="Precio" id="fs-precio" />
+    <input type="hidden" name="Mensaje del administrador" id="fs-msg" />
+    <input type="file" name="attachment" id="fs-file" />
+  </form>
+  <iframe name="fs-iframe" style="display:none" title="envio"></iframe>
+
 <script>
   const $ = (id) => document.getElementById(id);
   const $val = (id) => $(id).value.trim();
@@ -556,11 +573,12 @@
     toast("✅ Descargado");
   });
 
-  // Envío de publicación al administrador vía FormSubmit (sin backend).
-  // En el PRIMER envío FormSubmit manda un correo de activación a ADMIN_EMAIL:
-  // hay que hacer clic en "Activate" y recién ahí llegan los correos.
+  // Envío de publicación al administrador.
+  // El endpoint /ajax de FormSubmit NO adjunta archivos; para adjuntar el .md
+  // se usa el endpoint normal con un <form enctype="multipart/form-data"> real
+  // y el archivo inyectado vía DataTransfer, enviado a un iframe oculto
+  // (así no se sale de la página). El correo llega con el .md adjunto.
   const ADMIN_EMAIL = "shcdigitalsolutions@gmail.com";
-  const SUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${ADMIN_EMAIL}`;
 
   $("btn-send").addEventListener("click", () => {
     if (!validate()) {
@@ -573,38 +591,48 @@
     const msg = $val("adminMsg");
     const asunto = `Nueva publicación — ${$val("title")}`;
 
-    // FormSubmit AJAX no adjunta archivos (ver docs): el .md se envía como
-    // campo de texto dentro del correo para que llegue completo.
-    const form = new FormData();
-    form.append("_subject", asunto);
-    form.append("_template", "table");
-    form.append("Slug", slug);
-    form.append("Título", $val("title"));
-    form.append("Asignatura", $val("asignatura"));
-    form.append("Precio", $val("precio") || "Consultar");
-    form.append("Mensaje del administrador", msg || "—");
-    form.append(`Contenido archivo (${slug}.md)`, md);
+    // Adjuntar el .md generado al input file (DataTransfer permite inyectarlo).
+    try {
+      const dt = new DataTransfer();
+      dt.items.add(new File([md], `${slug}.md`, { type: "text/markdown;charset=utf-8" }));
+      $("fs-file").files = dt.files;
+    } catch (e) {
+      console.error(e);
+      toast("⚠ Tu navegador no permite adjuntar el archivo. Se abrió el correo manual.");
+      abrirCorreoFallback({ asunto, slug, markdown: md, mensajeAdmin: msg });
+      return;
+    }
+
+    $("fs-subject").value = asunto;
+    $("fs-slug").value = slug;
+    $("fs-titulo").value = $val("title");
+    $("fs-asignatura").value = $val("asignatura");
+    $("fs-precio").value = $val("precio") || "Consultar";
+    $("fs-msg").value = msg || "—";
 
     $("btn-send").disabled = true;
     $("btn-send").textContent = "Enviando…";
 
-    fetch(SUBMIT_ENDPOINT, { method: "POST", body: form })
-      .then((r) => r.json())
-      .then((res) => {
-        if (!res.success) throw new Error(res.message || "Error de FormSubmit");
-        toast("✅ Publicación enviada al administrador");
-        $("output").value = md;
-        $("download-name").textContent = `${slug}.md`;
-      })
-      .catch((e) => {
-        console.error(e);
-        toast("⚠ No se pudo enviar. Se abrió el correo para enviarlo manual.");
-        abrirCorreoFallback({ asunto, slug, markdown: md, mensajeAdmin: msg });
-      })
-      .finally(() => {
-        $("btn-send").disabled = false;
-        $("btn-send").textContent = "Enviar publicación";
-      });
+    // El submit del form real navega el iframe oculto con el adjunto.
+    // FormSubmit no expone respuesta a JS en este endpoint, así que se asume
+    // éxito tras enviar; si algo falla, el mailto de respaldo sigue disponible.
+    setTimeout(() => {
+      toast("📤 Publicación enviada. Revisá el correo (y el spam).");
+      $("output").value = md;
+      $("download-name").textContent = `${slug}.md`;
+      $("btn-send").disabled = false;
+      $("btn-send").textContent = "Enviar publicación";
+    }, 1500);
+
+    try {
+      $("fs-form").submit();
+    } catch (e) {
+      console.error(e);
+      toast("⚠ No se pudo enviar. Se abrió el correo para enviarlo manual.");
+      abrirCorreoFallback({ asunto, slug, markdown: md, mensajeAdmin: msg });
+      $("btn-send").disabled = false;
+      $("btn-send").textContent = "Enviar publicación";
+    }
   });
 
   function abrirCorreoFallback(payload) {
