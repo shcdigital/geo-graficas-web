@@ -1,19 +1,11 @@
-// Materias disponibles para el filtro del catálogo.
-// Editá esta lista para agregar o cambiar materias y sus emojis.
-// El filtro siempre las muestra aunque no haya publicaciones con esa materia.
+// Materias disponibles para el filtro del catálogo y el desplegable del editor.
+// Fuente única: src/data/materias.json (la edita también el panel de admin).
+
+import materiasData from "./materias.json";
 
 export interface MateriaInfo {
   materia: string;
   emoji: string;
 }
 
-export const MATERIAS: MateriaInfo[] = [
-  { materia: "Matemática", emoji: "🧮" },
-  { materia: "Lengua y Literatura", emoji: "📚" },
-  { materia: "Historia", emoji: "📜" },
-  { materia: "Ciencias Naturales", emoji: "🔬" },
-  { materia: "Geografía", emoji: "🌍" },
-  { materia: "Escritura", emoji: "✏️" },
-  { materia: "Datos y Estadística", emoji: "📊" },
-  { materia: "Laboratorio", emoji: "🧪" },
-];
+export const MATERIAS: MateriaInfo[] = (materiasData as { materias: MateriaInfo[] }).materias;

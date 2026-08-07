@@ -1,0 +1,12 @@
+{
+  "materias": [
+    { "materia": "Matemática", "emoji": "🧮" },
+    { "materia": "Lengua y Literatura", "emoji": "📚" },
+    { "materia": "Historia", "emoji": "📜" },
+    { "materia": "Ciencias Naturales", "emoji": "🔬" },
+    { "materia": "Geografía", "emoji": "🌍" },
+    { "materia": "Escritura", "emoji": "✏️" },
+    { "materia": "Datos y Estadística", "emoji": "📊" },
+    { "materia": "Laboratorio", "emoji": "🧪" }
+  ]
+}

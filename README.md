@@ -12,9 +12,9 @@ Sitio en vivo: <https://geo-graficas-web-d6a153.gitlab.io/>
 - **Catálogo tipo feed de Instagram**: grilla de "posts" con cada cuadernillo.
 - **Filtro por materias**: barra de chips (emoji + materia) que filtra la
   grilla dinámicamente sin recargar. Las materias se definen en
-  [`src/data/materias.ts`](src/data/materias.ts) (siempre visibles aunque no
-  haya publicaciones) y se suman automáticamente las materias publicadas que
-  no estén en esa lista.
+  [`src/data/materias.json`](src/data/materias.json) (fuente única, siempre
+  visibles aunque no haya publicaciones) y se suman automáticamente las
+  materias publicadas que no estén en esa lista.
 - **Página de detalle** por recurso (unidades, contenido, precio por categoría).
 - **Carrito + checkout**: agrega cuadernillos por categoría, permite ajustar
   cantidades y **vaciar el carrito**, y dispara `POST /checkout` al worker de
@@ -47,8 +47,10 @@ npm run preview   # previsualizar el build
 - **Datos del negocio**: se centralizan en [`src/data/site.ts`](src/data/site.ts)
   (`whatsapp`, `instagram`, `bio`, etc.).
 - **Materias del filtro**: lista fija en
-  [`src/data/materias.ts`](src/data/materias.ts). Para agregar o cambiar una
-  materia/emoji, editá esa lista (el filtro la muestra siempre).
+  [`src/data/materias.json`](src/data/materias.json) (formato
+  `{"materias": [{"materia": "...", "emoji": "..."}]}`, fuente única). Para
+  agregar o cambiar una materia/emoji, editá esa lista (el filtro la muestra
+  siempre y el panel de admin la usa en su desplegable).
 - **Precios**: fuente única en [`src/data/prices.json`](src/data/prices.json)
   (`{"categories": {"Cat-A": 1000, ...}}`). Los cuadernillos referencian su
   categoría por precio (bordes: `<= 1000` → Cat-A, ver `update_prices.py`).
