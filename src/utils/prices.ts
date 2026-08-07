@@ -1,7 +1,9 @@
 // src/utils/prices.ts
 // Helper to get price from category code
 
-import prices from "../data/prices.json";
+import pricesData from "../data/prices.json";
+
+const prices = (pricesData as { categories: Record<string, number> }).categories;
 
 export function getPrice(category: string): string {
   const price = (prices as Record<string, number>)[category];
