@@ -77,7 +77,7 @@ const links = [
               <span>Total</span>
               <strong x-text="$store.cart.formattedTotal"></strong>
             </div>
-            <button class="navbar__cart-checkout" @click="$store.cart.checkout(prompt('Email para la confirmación:'))">
+            <button class="navbar__cart-checkout" @click="$store.cart.checkout()">
               Pagar con MercadoPago
             </button>
           </div>

@@ -132,7 +132,7 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
             }).format(this.total);
           },
 
-          async checkout(customerEmail) {
+          async checkout() {
             if (this.items.length === 0) return;
             
             try {
@@ -141,7 +141,7 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   items: this.items.map(i => ({ slug: i.slug, quantity: i.qty })),
-                  customerEmail: customerEmail || '',
+                  customerEmail: '',  // MP asks for email in their checkout
                 }),
               });
               
