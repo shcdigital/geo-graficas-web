@@ -14,7 +14,7 @@ const { recursos } = Astro.props;
 <div class="feed">
   <ul class="feed__grid">
     {recursos.map((r) => (
-      <li>
+      <li data-materia={r.data.materia}>
         <CardRecurso recurso={r} />
       </li>
     ))}

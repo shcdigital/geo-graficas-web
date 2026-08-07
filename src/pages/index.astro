@@ -10,6 +10,7 @@ import Icon from "../components/ui/Icon.astro";
 
 import { getCollection } from "astro:content";
 import { SITE } from "../data/site";
+import { MATERIAS } from "../data/materias";
 import { contactoUrl, whatsappHabilitado, instagramDmUrl } from "../data/contacto";
 
 const todos = await getCollection("recursos");
@@ -19,6 +20,16 @@ const recursos = todos
 
 const destacados = recursos.filter((r) => r.data.destacado);
 const waOk = whatsappHabilitado();
+
+// Materias del filtro: la lista fija (siempre visible aunque no haya publicaciones)
+// más cualquier materia publicada que no esté en esa lista.
+const materias = [...MATERIAS];
+for (const r of recursos) {
+  if (!materias.some((m) => m.materia === r.data.materia)) {
+    materias.push({ materia: r.data.materia, emoji: r.data.emoji });
+  }
+}
+materias.sort((a, b) => a.materia.localeCompare(b.materia, "es"));
 ---
 
 <Layout title={`${SITE.nombre} — Cuadernillos y recursos didácticos`}>
@@ -40,6 +51,31 @@ const waOk = whatsappHabilitado();
           </a>
         </div>
 
+        <div class="filtro" x-data="filtroCatalogo()">
+          <div class="filtro__barra" role="group" aria-label="Filtrar por materia">
+            <button
+              type="button"
+              class="filtro__chip"
+              :class="{ 'filtro__chip--activo': activa === 'todas' }"
+              @click="filtrar('todas')"
+            >
+              Todas
+            </button>
+            {materias.map((m) => (
+              <button
+                type="button"
+                class="filtro__chip"
+                :class={`{ 'filtro__chip--activo': activa === \`${m.materia}\` }`}
+                @click={`filtrar(\`${m.materia}\`)`}
+              >
+                <span class="filtro__emoji" aria-hidden="true">{m.emoji}</span>
+                {m.materia}
+              </button>
+            ))}
+          </div>
+          <p class="filtro__estado" x-show="activa !== 'todas'" x-text="'Mostrando: ' + activa"></p>
+        </div>
+
         {destacados.length > 0 && (
           <>
             <h3 class="seccion__minititulo">✨ Destacados del feed</h3>
@@ -49,6 +85,9 @@ const waOk = whatsappHabilitado();
 
         <h3 class="seccion__minititulo">📚 Todo el material</h3>
         <FeedGrid recursos={recursos} />
+        <p class="filtro__vacio" x-show="activa !== 'todas' && !hayCoincidencias()" role="status">
+          Todavía no hay publicaciones de esta materia. ¡Pronto sumamos material!
+        </p>
       </div>
     </section>
 
@@ -121,6 +160,26 @@ const waOk = whatsappHabilitado();
   <Footer />
 </Layout>
 
+<script is:inline>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('filtroCatalogo', () => ({
+      activa: 'todas',
+      filtrar(materia) {
+        this.activa = materia;
+        const cards = document.querySelectorAll('#catalogo [data-materia]');
+        cards.forEach((card) => {
+          const match = materia === 'todas' || card.dataset.materia === materia;
+          card.hidden = !match;
+        });
+      },
+      hayCoincidencias() {
+        if (this.activa === 'todas') return true;
+        return document.querySelectorAll(`#catalogo [data-materia="${this.activa}"]:not([hidden])`).length > 0;
+      },
+    }));
+  });
+</script>
+
 <style>
   .seccion {
     padding: var(--spacing-3xl) var(--container-pad);
@@ -177,6 +236,54 @@ const waOk = whatsappHabilitado();
   .seccion__minititulo {
     font-size: var(--font-size-xl);
     margin: var(--spacing-2xl) 0 var(--spacing-lg);
+  }
+  .filtro {
+    margin: var(--spacing-lg) 0 var(--spacing-2xl);
+  }
+  .filtro__barra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: center;
+  }
+  .filtro__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-base);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .filtro__chip:hover {
+    border-color: var(--color-brand-primary);
+  }
+  .filtro__chip--activo {
+    background: var(--gradient-brand);
+    border-color: transparent;
+    color: #fff;
+  }
+  .filtro__emoji {
+    font-size: 1.05em;
+  }
+  .filtro__estado {
+    margin: var(--spacing-sm) 0 0;
+    color: var(--color-brand-primary);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+  }
+  .filtro__vacio {
+    margin: var(--spacing-2xl) 0;
+    padding: var(--spacing-xl);
+    text-align: center;
+    border: 1px dashed var(--color-border-default);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
   }
   .pasos {
     display: grid;

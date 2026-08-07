@@ -73,6 +73,10 @@ const links = [
           </div>
 
           <div class="navbar__cart-footer" x-show="$store.cart.items.length > 0">
+            <button class="navbar__cart-clear" @click="$store.cart.clear()">
+              <Icon name="trash" size={13} />
+              <span>Vaciar carrito</span>
+            </button>
             <div class="navbar__cart-total">
               <span>Total</span>
               <strong x-text="$store.cart.formattedTotal"></strong>
@@ -345,6 +349,31 @@ const links = [
     gap: var(--spacing-md);
     padding: var(--spacing-lg);
     border-top: 1px solid var(--color-border-default);
+  }
+
+  .navbar__cart-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .navbar__cart-clear:hover {
+    color: var(--color-error);
+    background: var(--color-surface-soft);
+  }
+  .navbar__cart-clear:focus-visible {
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 2px;
   }
 
   .navbar__cart-total {
