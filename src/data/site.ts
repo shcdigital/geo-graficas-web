@@ -17,4 +17,6 @@ export const SITE = {
   // Número de WhatsApp con código de país, SOLO dígitos. Ej: "5491122334455"
   // Dejar "" para ocultar WhatsApp (cae a DM de Instagram).
   whatsapp: "541167040934",
+  // Worker de pagos/email (geo-graficas-pay). Endpoints: /checkout y /email.
+  payUrl: "https://geo-graficas-pay.pablo-berthold.workers.dev",
 } as const;

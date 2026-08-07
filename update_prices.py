@@ -19,7 +19,7 @@ def get_category(price_str):
     except ValueError:
         return "Cat-A"
 
-directory = "/home/pablo/GITLAB/geo-graficas-web/src/content/recursos/"
+directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src/content/recursos")
 files = [f for f in os.listdir(directory) if f.endswith('.md')]
 
 for filename in files:
