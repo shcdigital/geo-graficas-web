@@ -140,8 +140,7 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  items: this.items.map(i => ({ slug: i.slug, quantity: i.qty })),
-                  customerEmail: '',  // MP asks for email in their checkout
+                  items: this.items.map(i => ({ slug: i.slug, title: i.title, quantity: i.qty })),
                 }),
               });
               
