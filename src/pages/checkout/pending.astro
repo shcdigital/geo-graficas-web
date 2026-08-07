@@ -1,0 +1,72 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Pago pendiente · Geo Gráficas">
+  <main id="contenido" class="container">
+    <section class="checkout-result checkout-result--pending">
+      <div class="checkout-result__icon" aria-hidden="true">⏳</div>
+      <h1>Pago pendiente</h1>
+      <p class="checkout-result__message">
+        El pago está siendo procesado. Recibirás la confirmación por email cuando se apruebe.
+      </p>
+      <div class="checkout-result__actions">
+        <a href="/" class="btn btn--primary">Volver al inicio</a>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .checkout-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: var(--spacing-3xl) var(--spacing-lg);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .checkout-result__icon {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-lg);
+    }
+    .checkout-result h1 {
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-primary);
+    }
+    .checkout-result__message {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-xl);
+      line-height: 1.6;
+    }
+    .checkout-result__actions {
+      display: flex;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius-full);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn--primary {
+      background: var(--gradient-brand);
+      color: #fff;
+    }
+    .btn--secondary {
+      background: var(--color-surface-soft);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-default);
+    }
+    .checkout-result--success .checkout-result__icon { color: var(--color-success); }
+    .checkout-result--failure .checkout-result__icon { color: var(--color-error); }
+    .checkout-result--pending .checkout-result__icon { color: var(--color-warning); }
+  </style>
