@@ -77,7 +77,9 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
 
           save() {
             localStorage.setItem('geo-graficas-cart', JSON.stringify(this.items));
-            this.$dispatch('cart-updated', { count: this.count, total: this.total });
+            window.dispatchEvent(new CustomEvent('cart-updated', { 
+              detail: { count: this.count, total: this.total } 
+            }));
           },
 
           add(product) {
