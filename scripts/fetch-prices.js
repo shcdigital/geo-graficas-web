@@ -43,16 +43,16 @@ async function fetchPrices() {
 
     // Fallback prices (should match products.json)
     const fallbackPrices = {
-      "Cat-A": 1000,
-      "Cat-B": 4500,
-      "Cat-C": 8500,
-      "Cat-D": 12000,
-      "Cat-E": 15000,
-      "Cat-F": 20000,
-      "Cat-G": 25000,
-      "Cat-H": 30000,
-      "Cat-I": 40000,
-      "Cat-J": 50000,
+      "Cat-A": 999,
+      "Cat-B": 4499,
+      "Cat-C": 8499,
+      "Cat-D": 1200,
+      "Cat-E": 1500,
+      "Cat-F": 2999,
+      "Cat-G": 2599,
+      "Cat-H": 3499,
+      "Cat-I": 4999,
+      "Cat-J": 5999,
     };
 
     const fs = await import("fs");

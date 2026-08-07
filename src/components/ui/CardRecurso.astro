@@ -184,11 +184,21 @@ const comprable = !Number.isNaN(precioNumerico);
     font-size: var(--font-size-sm);
     color: #fff;
   }
+  .card__btn--cart {
+    background: var(--color-cart, #38b6e8);
+    padding: 0.3rem 0.65rem;
+    font-size: var(--font-size-xs);
+    gap: 0.25rem;
+  }
   .card__btn--wa {
     background: var(--color-whatsapp);
   }
   .card__btn--ig {
     background: var(--color-instagram);
+  }
+  .card__btn--cart:hover {
+    background: #2ea3d6;
+    transform: translateY(-1px);
   }
   .card__btn--wa:hover,
   .card__btn--ig:hover {
