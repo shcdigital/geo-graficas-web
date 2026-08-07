@@ -1,8 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/ui/Navbar.astro";
+import Footer from "../../components/ui/Footer.astro";
 ---
 
 <Layout title="Pago rechazado · Geo Gráficas">
+  <Navbar />
   <main id="contenido" class="container">
     <section class="checkout-result checkout-result--failure">
       <div class="checkout-result__icon" aria-hidden="true">❌</div>
@@ -18,6 +21,7 @@ import Layout from "../../layouts/Layout.astro";
       </div>
     </section>
   </main>
+  <Footer />
 
   <style>
     .checkout-result {
