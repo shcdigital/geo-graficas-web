@@ -1,5 +1,5 @@
 ---
-title: "Test Edit 1786044372815"
+title: "Cuadernillo de Biología: La Célula"
 description: "Esquemas, cuadros comparativos y actividades con clave sobre la célula para 2° año."
 pubDate: 2026-07-12
 nivel: "Secundaria"
