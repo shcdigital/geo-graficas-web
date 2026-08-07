@@ -9,10 +9,21 @@ image: node:20
 stages:
   - deploy
 
+# Caché de npm keyed por lockfile: ahorra minutos de ejecutor compartido
+# (npm ci reinstala desde la caché local .npm/ en vez de re-descargar).
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+    - node_modules/
+  policy: pull-push
+
 pages:
   stage: deploy
   script:
-    - npm ci
+    - npm ci --cache .npm --no-audit --no-fund
     - npm run build
     - "mkdir -p public && cp -r dist/* public/"
   artifacts:

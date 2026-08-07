@@ -14,3 +14,6 @@ npm-debug.log*
 
 # astro
 src/data/prices.json
+
+# caché de npm del CI
+.npm/
