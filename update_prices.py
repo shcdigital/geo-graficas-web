@@ -6,7 +6,7 @@ def get_category(price_str):
     price_str = price_str.replace('$', '').replace('AR$', '').replace('.', '').replace(',', '').strip()
     try:
         price = int(price_str)
-        if price < 1000: return "Cat-A"
+        if price <= 1000: return "Cat-A"
         if price < 5000: return "Cat-B"
         if price < 10000: return "Cat-C"
         if price < 20000: return "Cat-D"
