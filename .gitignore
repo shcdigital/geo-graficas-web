@@ -13,4 +13,4 @@ npm-debug.log*
 .DS_Store
 
 # astro
-.astro/src/data/prices.json
+src/data/prices.json
