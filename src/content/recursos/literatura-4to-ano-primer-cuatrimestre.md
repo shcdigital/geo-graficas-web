@@ -5,13 +5,13 @@ pubDate: 2026-08-06
 nivel: "Secundaria"
 ciclo: "Superior 4° año"
 asignatura: "Literatura"
-materia: "Literatura"
+materia: "Lengua y Literatura"
 formato: "PDF"
 paginas: 45
 unidades: ["Mitos","Tragedias Griegas"]
 incluye: ["Edipo Rey y Antígona"]
-precio: "Cat-C"
-precioDestacado: true
+precio: "Cat-J"
+precioDestacado: false
 coverFrom: "#16a34a"
 coverTo: "#0284c7"
 emoji: "📚"
