@@ -3,9 +3,9 @@
 Sitio web estático de **Geo:Gráficas** — cuadernillos de actividades y recursos
 didácticos para nivel secundario (Fernanda y Cintia, Buenos Aires, Argentina).
 
-Construido con **Astro** y publicado en **GitLab Pages**.
+Construido con **Astro** y publicado en **GitHub Pages**.
 
-Sitio en vivo: <https://geo-graficas-web-d6a153.gitlab.io/>
+Sitio en vivo: <https://shcdigital.github.io/geo-graficas-web/>
 
 ## Características
 
@@ -23,10 +23,10 @@ Sitio en vivo: <https://geo-graficas-web-d6a153.gitlab.io/>
   `/checkout/failure`.
 - **Precios centralizados**: fuente única en
   [`src/data/prices.json`](src/data/prices.json) (formato `{"categories": {...}}`,
-  commiteado). El sitio la usa en build; el panel de admin la edita vía GitLab
+  commiteado). El sitio la usa en build; el panel de admin la edita vía GitHub
   API y el worker de pagos la baja del raw público antes de cada deploy.
 - **Contacto por WhatsApp e Instagram DM**: botones prellenados y flotante.
-- Desplegado en **GitLab Pages** (job `pages`).
+- Desplegado en **GitHub Pages** (workflow `.github/workflows/pages.yml`).
 
 ## Requisitos
 
@@ -55,17 +55,16 @@ npm run preview   # previsualizar el build
   (`{"categories": {"Cat-A": 1000, ...}}`). Los cuadernillos referencian su
   categoría por precio (bordes: `<= 1000` → Cat-A, ver `update_prices.py`).
 - **Dominio / base**: `astro.config.mjs` resuelve el dominio dinámicamente:
-  1. `SITE_URL` (override manual),
-  2. `CI_PAGES_URL` (lo setea GitLab en el job de Pages),
-  3. default: dominio actual.
-  El `base` se deriva del pathname (raíz para dominio único, `/<proyecto>/` en
-  namespace de grupo). **Para migrar de cuenta no hay que tocar código** — ver
+  1. `SITE_URL` (override manual, var de Actions),
+  2. default: `https://shcdigital.github.io/geo-graficas-web/`.
+  El `base` se deriva del pathname (`/geo-graficas-web/` en GitHub Pages).
+  **Para migrar de cuenta no hay que tocar código** — ver
   [`docs/MIGRACION-CUENTA.md`](docs/MIGRACION-CUENTA.md).
 
-## Publicación (GitLab Pages)
+## Publicación (GitHub Pages)
 
-`.gitlab-ci.yml` publica en `main` con **caché de npm** (keyed por
-`package-lock.json`) para ahorrar minutos del ejecutor compartido.
+`.github/workflows/pages.yml` publica en `main` (build Astro + `actions/deploy-pages`)
+con **caché de npm** (keyed por `package-lock.json`).
 
 ## Estructura
 

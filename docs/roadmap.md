@@ -4,7 +4,7 @@
 
 - [x] Sitio catálogo estático con estética de feed de Instagram.
 - [x] Contacto por WhatsApp e Instagram DM (prellenado por material).
-- [x] Publicación en GitLab Pages con pipeline automático.
+- [x] Publicación en GitHub Pages con workflow automático (`.github/workflows/pages.yml`).
 - [x] Filtro por materias con emojis (lista fija en `src/data/materias.ts`
       + materias publicadas).
 - [ ] Completar número real de WhatsApp en `src/data/site.ts`.

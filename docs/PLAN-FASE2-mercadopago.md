@@ -2,6 +2,9 @@
 
 > Plan aprobado. Guardado para retomarlo en una sesión futura.
 > Repo local: `~/GITLAB/geo-graficas-web` (frontend, GitLab Pages)
+> ⚠️ Documento histórico: describe el estado original (GitLab). El sistema
+> migró a GitHub (shcdigital): Pages, CI y contenido viven en
+> `github.com/shcdigital/geo-graficas-*`.
 
 ---
 
