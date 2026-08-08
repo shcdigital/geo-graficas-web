@@ -7,6 +7,21 @@ Construido con **Astro** y publicado en **GitHub Pages**.
 
 Sitio en vivo: <https://shcdigital.github.io/geo-graficas-web/>
 
+## Repos del sistema
+
+Este es el repo del **sitio web**. El sistema completo tiene 3 repos (migrados
+de GitLab a GitHub, cuenta `shcdigital`):
+
+| Repo | Rol | En vivo |
+|---|---|---|
+| **geo-graficas-web** | Sitio Astro en GitHub Pages (este repo) | <https://shcdigital.github.io/geo-graficas-web/> |
+| **geo-graficas-pay** | Worker Cloudflare: checkout Mercado Pago + emails | `https://geo-graficas-pay.pablo-berthold.workers.dev` |
+| **geo-graficas-admin** | Panel de administración (Worker + GitHub Pages) | <https://panel.geograficas.shcdigital.net.ar/> |
+
+El **contenido** (cuadernillos `.md`, imágenes, precios, materias) vive en
+**este repo** (`geo-graficas-web`); el admin lo lee/escribe vía GitHub API y el
+worker de pagos baja `prices.json` de acá al desplegar.
+
 ## Características
 
 - **Catálogo tipo feed de Instagram**: grilla de "posts" con cada cuadernillo.
@@ -30,7 +45,7 @@ Sitio en vivo: <https://shcdigital.github.io/geo-graficas-web/>
 
 ## Requisitos
 
-- Node.js 18 o superior
+- Node.js 18 o superior (proyecto con **Astro 4**)
 - npm
 
 ## Desarrollo
@@ -52,7 +67,7 @@ npm run preview   # previsualizar el build
   agregar o cambiar una materia/emoji, editá esa lista (el filtro la muestra
   siempre y el panel de admin la usa en su desplegable).
 - **Precios**: fuente única en [`src/data/prices.json`](src/data/prices.json)
-  (`{"categories": {"Cat-A": 1000, ...}}`). Los cuadernillos referencian su
+  (`{"categories": {"Cat-A": 999, ...}}`). Los cuadernillos referencian su
   categoría por precio (bordes: `<= 1000` → Cat-A, ver `update_prices.py`).
 - **Dominio / base**: `astro.config.mjs` resuelve el dominio dinámicamente:
   1. `SITE_URL` (override manual, var de Actions),
