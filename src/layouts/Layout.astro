@@ -147,8 +147,9 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
               
               const data = await response.json();
               
-              if (data.init_point) {
-                window.location.href = data.init_point;
+              if (data.sandbox_init_point || data.init_point) {
+                // Con credenciales de test, sandbox_init_point es el checkout válido.
+                window.location.href = data.sandbox_init_point || data.init_point;
               } else {
                 console.error('Checkout error:', data);
                 alert('Error al crear preferencia de pago');
