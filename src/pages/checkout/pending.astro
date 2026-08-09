@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/ui/Navbar.astro";
 import Footer from "../../components/ui/Footer.astro";
+import { route } from "../../utils/links";
 ---
 
 <Layout title="Pago pendiente · Geo Gráficas">
@@ -14,7 +15,7 @@ import Footer from "../../components/ui/Footer.astro";
         El pago está siendo procesado. Recibirás la confirmación por email cuando se apruebe.
       </p>
       <div class="checkout-result__actions">
-        <a href="/" class="btn btn--primary">Volver al inicio</a>
+        <a href={route("/")} class="btn btn--primary">Volver al inicio</a>
       </div>
     </section>
   </main>

@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/ui/Navbar.astro";
 import Footer from "../../components/ui/Footer.astro";
+import { route, section } from "../../utils/links";
 ---
 
 <Layout title="Pago aprobado · Geo Gráficas">
@@ -14,12 +15,19 @@ import Footer from "../../components/ui/Footer.astro";
         Tu compra se realizó correctamente. Recibirás un email de confirmación con los detalles.
       </p>
       <div class="checkout-result__actions">
-        <a href="/" class="btn btn--primary">Volver al inicio</a>
-        <a href="/#catalogo" class="btn btn--secondary">Seguir comprando</a>
+        <a href={route("/")} class="btn btn--primary">Volver al inicio</a>
+        <a href={section("/", "#catalogo")} class="btn btn--secondary">Seguir comprando</a>
       </div>
     </section>
   </main>
   <Footer />
+
+  <script is:inline>
+    // La compra ya se aprobó: limpiar el carrito persistido para que no quede
+    // en el próxima visita. (No se vacía antes de redirigir, para permitir reintentar si falla.)
+    localStorage.removeItem("geo-graficas-cart");
+    window.dispatchEvent(new CustomEvent("cart-updated", { detail: { count: 0, total: 0 } }));
+  </script>
 
   <style>
     .checkout-result {

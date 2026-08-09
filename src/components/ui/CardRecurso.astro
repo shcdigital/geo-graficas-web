@@ -49,7 +49,7 @@ const comprable = !Number.isNaN(precioNumerico);
     <span class="card__price">{precioFormateado}</span>
     <div class="card__actions">
       {comprable && (
-        <button class="card__btn card__btn--cart" @click={`$store.cart.add({slug: "${r.precio}", title: "${r.title.replace(/"/g, '\\"')}", price: ${precioNumerico}, qty: 1})`}>
+        <button class="card__btn card__btn--cart" @click={`$store.cart.add({slug: "${recurso.slug}", category: "${r.precio}", title: "${r.title.replace(/"/g, '\\"')}", price: ${precioNumerico}, qty: 1})`}>
           <Icon name="cart" size={15} />
           <span>Agregar</span>
         </button>

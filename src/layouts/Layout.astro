@@ -89,6 +89,7 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
             } else {
               this.items.push({
                 slug: product.slug,
+                category: product.category,
                 title: product.title,
                 price: product.price,
                 qty: product.qty || 1,
@@ -140,14 +141,13 @@ const canonical = `${import.meta.env.SITE}${restoRuta}`;
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  items: this.items.map(i => ({ slug: i.slug, title: i.title, quantity: i.qty })),
+                  items: this.items.map(i => ({ slug: i.slug, category: i.category, title: i.title, quantity: i.qty })),
                 }),
               });
               
               const data = await response.json();
               
               if (data.init_point) {
-                this.clear();
                 window.location.href = data.init_point;
               } else {
                 console.error('Checkout error:', data);
